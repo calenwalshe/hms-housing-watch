@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HMS Short-Term Housing Watch</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <h1>HMS Short-Term Housing Watch</h1>
+  <div class="meta" id="meta" aria-live="polite">Loading…</div>
+  <div class="status" id="status" role="status" hidden></div>
+  <p class="note">These are leads, not verified or endorsed listings. Confirm current availability, exact dates, total costs, sublet authorization, and safety directly with the host.</p>
+  <h2>Current leads</h2>
+  <ul class="list" id="leads"></ul>
+  <h2>Search these sites</h2>
+  <ul class="list" id="searches"></ul>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function safeUrl(u) { try { var p = new URL(u); return (p.protocol === "https:" || p.protocol === "http:") ? p.href : null; } catch (e) { return null; } }
+  function link(url, text) { var h = safeUrl(url); if (!h) return el("span", "", text); var a = el("a", "", text); a.href = h; a.rel = "noopener noreferrer"; a.target = "_blank"; return a; }
+  function money(n) { return "$" + Number(n).toLocaleString("en-US"); }
+  function fail() {
+    $("meta").textContent = "";
+    var s = $("status"); s.hidden = false;
+    s.textContent = "The lead list could not be loaded, so nothing current is shown. Try again later; use the search links on the source sites in the meantime.";
+  }
+  fetch("leads.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+    var m = $("meta"); m.textContent = "";
+    var p1 = el("p", "", "Stay: " + d.stay.start + " to " + d.stay.end + " · Target " + money(d.budget.target_monthly) + "/month, stretch " + money(d.budget.max_monthly) + "/month");
+    var p2 = el("p", "", "Last successful refresh: ");
+    var t = el("time", "", d.generated_at.slice(0, 16).replace("T", " ") + " (" + d.generated_at.slice(19) + ")"); t.dateTime = d.generated_at; p2.appendChild(t);
+    m.appendChild(p1); m.appendChild(p2);
+    var ul = $("leads");
+    if (!d.leads.length) ul.appendChild(el("li", "note", "No verified leads at the last refresh."));
+    d.leads.forEach(function (l) {
+      var li = el("li");
+      var top = el("div"); top.appendChild(el("span", "source", l.source + " — ")); top.appendChild(link(l.url, "Open listing")); li.appendChild(top);
+      li.appendChild(el("div", "annotation", l.annotation));
+      li.appendChild(el("div", "checked", "Last checked " + l.checked_at));
+      ul.appendChild(li);
+    });
+    var su = $("searches");
+    if (!d.search_links.length) su.appendChild(el("li", "note", "No search links."));
+    d.search_links.forEach(function (s) { var li = el("li"); li.appendChild(link(s.url, s.source + " — live search")); su.appendChild(li); });
+  }).catch(fail);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+housing-research-harvard-medical-school.md
+*.lock
+*.log
+logs/
+__pycache__/
+*.pyc
+.env
+*.tmp
