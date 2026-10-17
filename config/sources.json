@@ -1,6 +1,12 @@
 {
-  "stay": {"start": "2026-11-09", "end": "2027-04-19"},
-  "budget": {"target_monthly": 1200, "max_monthly": 1400},
+  "stay": {
+    "start": "2026-11-09",
+    "end": "2027-04-19"
+  },
+  "budget": {
+    "target_monthly": 1200,
+    "max_monthly": 1400
+  },
   "cdp_proxy": "http://127.0.0.1:19999",
   "sources": [
     {
@@ -39,6 +45,6 @@
     }
   ],
   "unresolved_sources": [
-    "Harvard off-campus housing portal and HMS housing resources: exact public URLs not verifiable from this host (HMS pages return 403 to non-browser clients; portal host did not resolve). Owner to supply URLs; they would be link_only."
+    "Harvard off-campus housing portal and HMS housing resources are not configured: their public URLs could not be verified from the collection host (HMS pages return 403 to non-browser clients; the portal host did not resolve). Limitation: these appear on the page neither as leads nor as search links until a verified URL is added as a link_only source."
   ]
 }
