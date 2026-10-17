@@ -129,7 +129,6 @@ def parse_listing(html):
     docs = _ldjson(html)
     acc = next((d for d in docs if d.get("@type") == "Accommodation"), None)
     faq = next((d for d in docs if d.get("@type") == "FAQPage"), None)
-    crumbs = next((d for d in docs if d.get("@type") == "BreadcrumbList"), None)
     if not acc or not faq:
         raise SourceError("RotatingRoom listing: expected structured data missing (markup changed?)")
     facts = {"rent": None, "period": None, "ranges": [], "miles": None, "hood": None,
@@ -146,10 +145,14 @@ def parse_listing(html):
         m = re.search(r"Harvard Medical School, ([\d.]+) miles", text)
         if m:
             facts["miles"] = float(m.group(1))
-    if crumbs:
-        names = [i.get("name", "") for i in crumbs.get("itemListElement", [])]
-        if len(names) >= 3 and names[2].endswith(" Sublets"):
-            facts["hood"] = names[2][: -len(" Sublets")]
+    # Location: the breadcrumb is a site category and can conflict with the listing, so it is
+    # ignored. Use the listing's own locality only when the FAQ rent answer names the same place;
+    # otherwise omit the location.
+    loc = (acc.get("address") or {}).get("addressLocality")
+    rent_ans = next((q.get("acceptedAnswer", {}).get("text", "") for q in faq.get("mainEntity", [])
+                     if q.get("name", "").startswith("How much is rent")), "")
+    if loc and re.search(r"\bin " + re.escape(loc) + r", [A-Z]{2}\b", rent_ans):
+        facts["hood"] = loc
     return facts
 
 
@@ -176,7 +179,7 @@ def normalize_lead(raw, source, stay, max_rent, today):
     if f["hood"]:
         parts.append(f["hood"])
     if f["miles"] is not None:
-        parts.append(f"{f['miles']:g} mi from HMS (per site)")
+        parts.append(f"{f['miles']:g} mi straight-line from HMS (per site)")
     if f["beds"]:
         parts.append(f"{f['beds']} bd unit; confirm whether room or whole unit")
     parts += [rent_txt, date_txt, "listed as furnished sublet; confirm utilities and total cost"]
