@@ -21,11 +21,11 @@ cd "$REPO"
 "$MAC_LANE" up || fail "mac-lane up"
 "$REPO/.venv/bin/python" scripts/daily_refresh.py || fail "daily_refresh.py"
 
-if git diff --quiet -- site/leads.json; then
+if git diff --quiet -- site/leads.json site/history.json && ! git ls-files --others --exclude-standard -- site/history.json | grep -q .; then
   echo "no change; nothing to publish"
   exit 0
 fi
-git add site/leads.json
+git add site/leads.json site/history.json
 git commit -m "data: daily refresh $(date +%F)" || fail "git commit"
 # Uses the service user's existing gh/git credentials; nothing is printed.
 git push origin main || fail "git push (local commit kept; next run retries)"

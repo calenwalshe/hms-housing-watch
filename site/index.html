@@ -14,6 +14,8 @@
   <p class="note">These are leads, not verified or endorsed listings. Confirm current availability, exact dates, total costs, sublet authorization, and safety directly with the host.</p>
   <h2>Current leads</h2>
   <ul class="list" id="leads"></ul>
+  <h2>Day by day</h2>
+  <div id="days"></div>
   <h2>Search these sites</h2>
   <ul class="list" id="searches"></ul>
 </main>
@@ -29,19 +31,52 @@
     var s = $("status"); s.hidden = false;
     s.textContent = "The lead list could not be loaded, so nothing current is shown. Try again later; use the search links on the source sites in the meantime.";
   }
+  function checkedLine(c) {
+    if (!c || !c.length) return null;
+    return c.map(function (s) {
+      return s.source + ": " + s.checked + " listings checked, " + s.over_budget + " over budget, " +
+        s.date_mismatch + " not covering the full stay, " + s.eligible + " eligible";
+    }).join(" · ");
+  }
+  function renderDays(hist) {
+    var box = $("days");
+    if (!hist || !hist.days || !hist.days.length) { box.appendChild(el("p", "note", "Daily history starts with the next refresh.")); return; }
+    var days = hist.days.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    days.forEach(function (day, i) {
+      var prev = days[i + 1];
+      var prevUrls = {}; if (prev) prev.leads.forEach(function (l) { prevUrls[l.url] = l; });
+      var curUrls = {}; day.leads.forEach(function (l) { curUrls[l.url] = l; });
+      var news = day.leads.filter(function (l) { return !prev || !prevUrls[l.url]; });
+      var gone = prev ? prev.leads.filter(function (l) { return !curUrls[l.url]; }) : [];
+      var head = el("p", "day-head", day.date + " — " + day.leads.length + (day.leads.length === 1 ? " lead" : " leads") +
+        (prev ? " (" + news.length + " new, " + gone.length + " gone)" : " (first day tracked)"));
+      box.appendChild(head);
+      var cl = checkedLine(day.checked);
+      if (cl) box.appendChild(el("p", "checked", cl));
+      if (news.length) {
+        var ul = el("ul", "list day-list");
+        news.forEach(function (l) { var li = el("li"); li.appendChild(el("span", "new", "New ")); li.appendChild(link(l.url, l.source)); li.appendChild(el("div", "annotation", l.annotation)); ul.appendChild(li); });
+        box.appendChild(ul);
+      }
+      gone.forEach(function (l) { box.appendChild(el("p", "checked", "Gone: " + l.source + " (last seen " + (prev ? prev.date : "") + ")")); });
+    });
+  }
+  fetch("history.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(renderDays);
   fetch("leads.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
     var m = $("meta"); m.textContent = "";
     var p1 = el("p", "", "Stay: " + d.stay.start + " to " + d.stay.end + " · Target " + money(d.budget.target_monthly) + "/month, stretch " + money(d.budget.max_monthly) + "/month");
     var p2 = el("p", "", "Last successful refresh: ");
     var t = el("time", "", d.generated_at.slice(0, 16).replace("T", " ") + " (" + d.generated_at.slice(19) + ")"); t.dateTime = d.generated_at; p2.appendChild(t);
     m.appendChild(p1); m.appendChild(p2);
+    var cl = checkedLine(d.checked);
+    if (cl) m.appendChild(el("p", "", cl));
     var ul = $("leads");
     if (!d.leads.length) ul.appendChild(el("li", "note", "No verified leads at the last refresh."));
     d.leads.forEach(function (l) {
       var li = el("li");
-      var top = el("div"); top.appendChild(el("span", "source", l.source + " — ")); top.appendChild(link(l.url, "Open listing")); li.appendChild(top);
+      var top = el("div"); if (l.first_seen && d.day && l.first_seen === d.day) top.appendChild(el("span", "new", "New today · ")); top.appendChild(el("span", "source", l.source + " — ")); top.appendChild(link(l.url, "Open listing")); li.appendChild(top);
       li.appendChild(el("div", "annotation", l.annotation));
-      li.appendChild(el("div", "checked", "Last checked " + l.checked_at));
+      li.appendChild(el("div", "checked", (l.first_seen ? "First seen " + l.first_seen + " · " : "") + "Last checked " + l.checked_at));
       ul.appendChild(li);
     });
     var su = $("searches");

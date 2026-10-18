@@ -27,6 +27,7 @@ class Lead:
     source: str
     annotation: str
     checked_at: str
+    first_seen: str = ""
 
 
 @dataclass
@@ -197,6 +198,8 @@ def collect_rotatingroom(source, cfg, override):
     if not urls:
         raise SourceError("RotatingRoom index returned no listings")
     leads, today = [], date.today()
+    stats = {"source": source.name, "checked": 0, "over_budget": 0, "date_mismatch": 0, "eligible": 0}
+    max_rent = cfg["budget"]["max_monthly"]
     for u in urls:
         time.sleep(source.delay_seconds)
         try:
@@ -205,11 +208,16 @@ def collect_rotatingroom(source, cfg, override):
             raise
         except Exception as e:  # network/CDP error: fail the whole source
             raise SourceError(f"listing fetch failed for {u}: {e}")
-        lead = normalize_lead({"url": u, "facts": facts}, source, stay,
-                              cfg["budget"]["max_monthly"], today)
+        stats["checked"] += 1
+        if facts["rent"] is not None and facts["period"] in (None, "MON") and facts["rent"] > max_rent:
+            stats["over_budget"] += 1
+        elif facts["ranges"] and not any(s <= stay[0] and e >= stay[1] for s, e in facts["ranges"]):
+            stats["date_mismatch"] += 1
+        lead = normalize_lead({"url": u, "facts": facts}, source, stay, max_rent, today)
         if lead:
+            stats["eligible"] += 1
             leads.append(lead)
-    return leads
+    return leads, stats
 
 
 PARSERS = {"rotatingroom": collect_rotatingroom}
@@ -219,7 +227,7 @@ PARSERS = {"rotatingroom": collect_rotatingroom}
 
 def collect_sources(override=None):
     cfg, sources = load_config()
-    leads, links, seen = [], [], set()
+    leads, links, seen, checked = [], [], set(), []
     for s in sources:
         if s.mode == "link_only":
             links.append(SearchLink(url=s.search_url, source=s.name, link_kind=s.link_kind))
@@ -227,28 +235,63 @@ def collect_sources(override=None):
         if s.parser not in PARSERS:
             raise SourceError(f"{s.name}: unknown parser '{s.parser}'")
         try:
-            got = PARSERS[s.parser](s, cfg, override)
+            got, stats = PARSERS[s.parser](s, cfg, override)
         except SourceError:
             raise
         except Exception as e:
             raise SourceError(f"{s.name}: {e}")
+        checked.append(stats)
         for l in got:
             key = l.url.split("?")[0].rstrip("/")
             if key not in seen:
                 seen.add(key)
                 leads.append(l)
-    return cfg, leads, links
+    return cfg, leads, links, checked
 
 
-def write_successful_snapshot(cfg, leads, search_links, generated_at, path=SNAPSHOT):
-    doc = {"generated_at": generated_at, "stay": cfg["stay"], "budget": cfg["budget"],
-           "leads": [asdict(l) for l in leads], "search_links": [asdict(s) for s in search_links]}
+def _berlin_day(generated_at):
+    from zoneinfo import ZoneInfo
+    return datetime.fromisoformat(generated_at).astimezone(ZoneInfo("Europe/Berlin")).date().isoformat()
+
+
+def _atomic_json(doc, path):
     tmp = path + ".tmp"
     with open(tmp, "w") as f:
         json.dump(doc, f, indent=2)
         f.write("\n")
     json.loads(open(tmp).read())  # validate before replacing
     os.replace(tmp, path)
+
+
+def write_successful_snapshot(cfg, leads, search_links, generated_at, path=SNAPSHOT, checked=None):
+    day = _berlin_day(generated_at)
+    prior_first_seen = {}
+    if os.path.exists(path):
+        try:
+            for l in json.load(open(path)).get("leads", []):
+                if l.get("first_seen"):
+                    prior_first_seen[l["url"]] = l["first_seen"]
+        except Exception:
+            pass
+    for l in leads:
+        l.first_seen = prior_first_seen.get(l.url, day)
+    lead_docs = [asdict(l) for l in leads]
+    doc = {"generated_at": generated_at, "day": day, "stay": cfg["stay"], "budget": cfg["budget"],
+           "checked": checked or [], "leads": lead_docs,
+           "search_links": [asdict(s) for s in search_links]}
+    _atomic_json(doc, path)
+    # Day-by-day archive next to the snapshot; same Berlin day replaces, cap 90 days.
+    hist_path = os.path.join(os.path.dirname(path), "history.json")
+    days = []
+    if os.path.exists(hist_path):
+        try:
+            days = json.load(open(hist_path)).get("days", [])
+        except Exception:
+            days = []
+    days = [d for d in days if d.get("date") != day]
+    days.append({"date": day, "generated_at": generated_at, "checked": checked or [], "leads": lead_docs})
+    days.sort(key=lambda d: d["date"])
+    _atomic_json({"days": days[-90:]}, hist_path)
 
 
 def main():
@@ -258,14 +301,14 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     try:
-        cfg, leads, links = collect_sources(a.transport)
+        cfg, leads, links, checked = collect_sources(a.transport)
     except Exception as e:
         print(f"refresh failed; snapshot unchanged: {e}", file=sys.stderr)
         return 1
     generated_at = datetime.now().astimezone().replace(microsecond=0).isoformat()
     print(f"{len(leads)} eligible leads, {len(links)} search links at {generated_at}")
     if not a.dry_run:
-        write_successful_snapshot(cfg, leads, links, generated_at, a.output)
+        write_successful_snapshot(cfg, leads, links, generated_at, a.output, checked)
     return 0
 
 
