@@ -21,5 +21,5 @@ cd "$REPO"
 "$REPO/.venv/bin/python" scripts/browser_pass.py --out "$REPO/var/prototype/index.html" || fail "browser_pass.py"
 
 set -a; . /home/agent/projects/pixelcloud/.env; set +a
-pixel update hms-housing-prototype "$REPO/var/prototype/index.html" --title "Prototype — browser-bridge daily pass" || fail "pixel update"
+/home/agent/bin/pixel update hms-housing-prototype "$REPO/var/prototype/index.html" --title "Prototype — browser-bridge daily pass" || fail "pixel update"
 echo "== $(date -Iseconds) published"
