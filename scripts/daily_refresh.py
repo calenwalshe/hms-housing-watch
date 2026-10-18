@@ -233,10 +233,20 @@ _CL_HOOD_RANK = {"brookline": 0, "mission hill": 0, "longwood": 0, "roxbury": 1,
                  "somerville": 2, "cambridge": 2, "medford": 3, "boston": 3}
 
 
+_CL_TWO_WORD_TOWNS = ("brookline village", "jamaica plain", "mission hill", "roxbury crossing")
+
+
 def _cl_town(url, fallback):
-    m = re.search(r"/view/d/([a-z]+(?:-[a-z]+)?)-", url)
-    if m and m.group(1) not in ("furnished", "private", "large", "room", "cozy"):
-        return m.group(1).replace("-", " ").title()
+    m = re.search(r"/view/d/([a-z]+(?:-[a-z]+){0,2})-", url)
+    if not m:
+        return fallback
+    slug = m.group(1).replace("-", " ")
+    for t in _CL_TWO_WORD_TOWNS:
+        if slug.startswith(t):
+            return t.title()
+    first = slug.split(" ")[0]
+    if first in _CL_HOOD_RANK or first in ("braintree", "watertown", "dorchester", "chelsea", "quincy", "malden", "everett", "arlington", "belmont", "newton", "waltham"):
+        return first.title()
     return fallback
 
 
