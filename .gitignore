@@ -2,6 +2,7 @@ housing-research-harvard-medical-school.md
 *.lock
 *.log
 logs/
+.venv/
 __pycache__/
 *.pyc
 .env

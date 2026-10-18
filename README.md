@@ -14,9 +14,11 @@ Static one-column page of current room/sublet leads near Harvard Medical School 
 - `docs/evidence/` — manual review evidence. `var/` (locks, logs, scratch) is git-ignored.
 
 ## Configuration and dependencies
-Python 3 (stdlib only for `--transport http`); `websockets` for the default CDP transport; Mac-lane
-(`mac-lane.sh up`, proxy `http://127.0.0.1:19999`); `git` with credentials for `origin` (run_daily.sh).
-`HMS_CONFIG` overrides the config path. Manual run: `python3 scripts/daily_refresh.py [--dry-run] [--transport http]`.
+Python 3 (stdlib only for `--transport http`); `websockets` (see `requirements.txt`, installed in the
+project `.venv`: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`) for the default
+CDP transport; Mac-lane (`mac-lane.sh up`, proxy `http://127.0.0.1:19999`); `git` with credentials for
+`origin` (run_daily.sh). `HMS_CONFIG` overrides the config path.
+Manual run: `.venv/bin/python scripts/daily_refresh.py [--dry-run] [--transport http]`.
 
 Source policy: RotatingRoom Boston is the only `collect` source (robots.txt allows all agents,
 terms have no automation clause; it reads each public listing page's structured data, one index

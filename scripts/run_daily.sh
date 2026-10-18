@@ -19,7 +19,7 @@ flock -n 9 || fail "another run holds the lock"
 
 cd "$REPO"
 "$MAC_LANE" up || fail "mac-lane up"
-python3 scripts/daily_refresh.py || fail "daily_refresh.py"
+"$REPO/.venv/bin/python" scripts/daily_refresh.py || fail "daily_refresh.py"
 
 if git diff --quiet -- site/leads.json; then
   echo "no change; nothing to publish"
