@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T21:43:05-07:00",
+  "generated_at": "2026-10-17T21:46:23-07:00",
   "day": "2026-10-18",
   "stay": {
     "start": "2026-11-09",
@@ -20,7 +20,7 @@
     {
       "source": "Craigslist Boston rooms (browser pass)",
       "checked": 321,
-      "over_budget": 115,
+      "over_budget": 109,
       "date_mismatch": 0,
       "eligible": 12
     }
@@ -36,14 +36,14 @@
     {
       "url": "https://www.craigslist.org/view/d/brookline-furnished-room-10-brookline/kZd4dzxyzFogJzqzZaWzxs",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Furnished; $775/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $775/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
     {
       "url": "https://www.craigslist.org/view/d/brookline-furnished-room-10-brookline/sWiSL12xqZcFm9ikW5hJaN",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Furnished; $775/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $775/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
@@ -57,14 +57,14 @@
     {
       "url": "https://www.craigslist.org/view/d/brookline-bedroom-avail-in-4-bdrm/e7Y5RKzoJS7BZovMCQfZzd",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Bedroom; $850/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $850/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
     {
       "url": "https://www.craigslist.org/view/d/brookline-medium-size-for-rent-for-900/fc3u2aDqkrqXKkgg7u94B2",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Medium; $900/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $900/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
@@ -78,14 +78,14 @@
     {
       "url": "https://www.craigslist.org/view/d/brookline-spacious-coolidge-corner/tZscM4ZPmPB225jejVURd8",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Spacious; $1,000/month shown; short-term/flexible mentioned; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $1,000/month shown; short-term/flexible mentioned; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
     {
       "url": "https://www.craigslist.org/view/d/brookline-large-private-room-with-bay/ub2SXDkA8rZntHzCN6jgje",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Large; $1,090/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "Brookline; $1,090/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     },
@@ -111,9 +111,9 @@
       "first_seen": "2026-10-18"
     },
     {
-      "url": "https://www.craigslist.org/view/d/brookline-furnished-room/qpjAVjfoCfg9LX1eB5YEHi",
+      "url": "https://www.craigslist.org/view/d/acton-1265-beautiful-furnished-room/bo6JkUMrD4nqbhg9ykwPkY",
       "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Furnished; $1,300/month shown; furnished; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "annotation": "boston/cambridge/brookline; $1,265/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
       "checked_at": "2026-10-17",
       "first_seen": "2026-10-18"
     }
