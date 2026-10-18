@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T21:08:25-07:00",
+  "generated_at": "2026-10-17T21:15:31-07:00",
   "day": "2026-10-18",
   "stay": {
     "start": "2026-11-09",
@@ -42,6 +42,31 @@
       "url": "https://huhousing.harvard.edu/",
       "source": "Harvard University Housing",
       "link_kind": "info page"
+    },
+    {
+      "url": "https://www.furnishedfinder.com/housing/massachusetts/boston",
+      "source": "Furnished Finder (Boston)",
+      "link_kind": "live search"
+    },
+    {
+      "url": "https://sabbaticalhomes.com/rentals-exchanges/united-states/homes-to-rent--massachusetts--boston",
+      "source": "SabbaticalHomes (Boston/Cambridge)",
+      "link_kind": "live search"
+    },
+    {
+      "url": "https://www.roomies.com/rooms/boston-ma",
+      "source": "Roomies Boston rooms",
+      "link_kind": "live search"
+    },
+    {
+      "url": "https://www.spareroom.com/rooms-for-rent/us/massachusetts/boston",
+      "source": "SpareRoom Boston",
+      "link_kind": "live search"
+    },
+    {
+      "url": "https://www.airbnb.com/s/Boston--MA/homes?monthly_start_date=2026-11-01&monthly_length=6",
+      "source": "Airbnb Boston monthly stays",
+      "link_kind": "monthly-stay search"
     },
     {
       "url": "https://boston.craigslist.org/search/roo?query=longwood&min_price=500&max_price=1400",

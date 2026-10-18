@@ -40,6 +40,37 @@
       "access_note": "Harvard University Housing (HUH) home page. Link only; HTTP 200 and title verified on 2026-10-16."
     },
     {
+      "name": "Furnished Finder (Boston)",
+      "search_url": "https://www.furnishedfinder.com/housing/massachusetts/boston",
+      "mode": "link_only",
+      "access_note": "Mid-term furnished rentals aimed at travel nurses/medical staff; large Boston inventory but mostly studios above budget, with some shared-home rooms. Cloudflare blocks non-browser clients (403, checked 2026-10-17); live search link only."
+    },
+    {
+      "name": "SabbaticalHomes (Boston/Cambridge)",
+      "search_url": "https://sabbaticalhomes.com/rentals-exchanges/united-states/homes-to-rent--massachusetts--boston",
+      "mode": "link_only",
+      "access_note": "Academic sabbatical rentals/exchanges with exact-date availability; Boston/Cambridge listings exist, mostly whole units above budget, occasional flatmate rooms. robots.txt disallows /search (checked 2026-10-17); live search link only."
+    },
+    {
+      "name": "Roomies Boston rooms",
+      "search_url": "https://www.roomies.com/rooms/boston-ma",
+      "mode": "link_only",
+      "access_note": "Room shares/roommates; Boston and Longwood Medical Area pages verified live 2026-10-17. Terms clause 17 prohibits screen/database scraping; live search link only."
+    },
+    {
+      "name": "SpareRoom Boston",
+      "search_url": "https://www.spareroom.com/rooms-for-rent/us/massachusetts/boston",
+      "mode": "link_only",
+      "access_note": "Flatshare/roommate listings; Boston search verified live 2026-10-17. Automation terms not confirmed collect-permitted; live search link only."
+    },
+    {
+      "name": "Airbnb Boston monthly stays",
+      "search_url": "https://www.airbnb.com/s/Boston--MA/homes?monthly_start_date=2026-11-01&monthly_length=6",
+      "mode": "link_only",
+      "link_kind": "monthly-stay search",
+      "access_note": "Monthly-stay search seeded with a Nov 2026 start and 6-month length (adjust in the UI); rooms in shared homes are the in-budget segment. Terms restrict automation; live search link only. URL verified live 2026-10-17."
+    },
+    {
       "name": "Craigslist Boston rooms",
       "search_url": "https://boston.craigslist.org/search/roo?query=longwood&min_price=500&max_price=1400",
       "mode": "link_only",
