@@ -9,7 +9,7 @@ Static one-column page of current room/sublet leads near Harvard Medical School 
 - `config/sources.json` — stay, budget, CDP proxy, and sources (`collect` or `link_only`).
 - `scripts/daily_refresh.py` — collects, filters, annotates, atomically replaces `site/leads.json` only if every `collect` source succeeds.
 - `scripts/run_daily.sh` — Mac-lane start, single-run lock, refresh, commit/push when data changed.
-- `systemd/` — inactive service and timer templates (daily 07:00 America/Los_Angeles, `Persistent=true`, 30 min runtime cap).
+- `systemd/` — service and timer templates (installed copies live in ~/.config/systemd/user/) (daily 07:00 America/Los_Angeles, `Persistent=true`, 30 min runtime cap).
 - `.github/workflows/pages.yml` — deploys only `site/`; permissions `contents: read`, `pages: write`, `id-token: write`.
 - `docs/evidence/` — manual review evidence. `var/` (locks, logs, scratch) is git-ignored.
 
@@ -26,11 +26,11 @@ request plus up to 40 detail requests 2 s apart, once a day; no sign-in, forms, 
 Craigslist, Zillow, and Apartments.com are `link_only`. Stored per lead: URL, source name, a short
 original annotation, and check date. No photos, ad text, titles, or contact details.
 
-## Activation approval gates (nothing below has been done)
-1. Create the public GitHub repository `hms-housing-watch` (exclude `housing-research-harvard-medical-school.md`; it is git-ignored).
-2. Push and set Pages source to "GitHub Actions" (deploys the page).
-3. Install and enable the systemd units: copy to `~/.config/systemd/user/`, fix the checkout path, `systemctl --user enable --now hms-housing-watch.timer`.
-4. Post-activation checks from the plan: one manual service run, open the public URL off-tailnet, confirm a simulated source failure publishes nothing.
+## Activation status (done 2026-10-17, owner-approved)
+1. Public GitHub repository: https://github.com/calenwalshe/hms-housing-watch (the private research brief is git-ignored and was never committed).
+2. GitHub Pages via Actions — live at https://calenwalshe.github.io/hms-housing-watch/
+3. systemd user units installed in `~/.config/systemd/user/` (checkout path set) and the timer enabled: daily 07:00 America/Los_Angeles.
+4. Post-activation checks passed: one manual service run (2026-10-17) collected via Mac-lane, committed, and pushed; the public URL serves the current snapshot; a failed refresh (missing dependency, same day) left the snapshot unpublished and unchanged.
 
 ## Known limitations
 - Harvard/HMS resources are link-only search links (HMS Housing and Dining, Harvard Off-Campus Housing Search, Harvard University Housing), verified by browser title on 2026-10-16; HMS pages return 403 to non-browser clients, so they are never collected.

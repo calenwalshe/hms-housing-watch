@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Daily wrapper: start Mac-lane, take a single-run lock, refresh, commit/push on change.
-# INACTIVE until the owner approves creating the public repo and enabling the timer.
+# Activated 2026-10-17 with owner approval (public repo + systemd timer live).
 # Failure at any step exits nonzero and leaves the committed snapshot untouched.
 set -euo pipefail
 
