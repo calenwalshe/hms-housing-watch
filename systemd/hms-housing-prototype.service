@@ -1,0 +1,11 @@
+# TEMPLATE - copy to ~/.config/systemd/user/ and replace %h/projects/hms-housing-watch with the checkout path.
+[Unit]
+Description=HMS housing browser-bridge prototype daily pass
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/projects/hms-housing-watch
+ExecStart=%h/projects/hms-housing-watch/scripts/run_prototype.sh
+TimeoutStartSec=30min

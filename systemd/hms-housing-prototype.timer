@@ -1,0 +1,11 @@
+# TEMPLATE - copy to ~/.config/systemd/user/.
+[Unit]
+Description=Daily HMS housing prototype pass at 05:00 Berlin
+
+[Timer]
+OnCalendar=*-*-* 05:00:00 Europe/Berlin
+Persistent=true
+Unit=hms-housing-prototype.service
+
+[Install]
+WantedBy=timers.target

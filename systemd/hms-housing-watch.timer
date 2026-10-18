@@ -1,9 +1,9 @@
 # TEMPLATE - inactive. Do not enable without owner approval (see README.md).
 [Unit]
-Description=Daily HMS housing watch refresh at 06:00 Berlin
+Description=Daily HMS housing watch refresh at 05:00 Berlin
 
 [Timer]
-OnCalendar=*-*-* 06:00:00 Europe/Berlin
+OnCalendar=*-*-* 05:00:00 Europe/Berlin
 Persistent=true
 Unit=hms-housing-watch.service
 

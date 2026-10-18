@@ -9,7 +9,7 @@ Static one-column page of current room/sublet leads near Harvard Medical School 
 - `config/sources.json` — stay, budget, CDP proxy, and sources (`collect` or `link_only`).
 - `scripts/daily_refresh.py` — collects, filters, annotates, atomically replaces `site/leads.json` only if every `collect` source succeeds.
 - `scripts/run_daily.sh` — Mac-lane start, single-run lock, refresh, commit/push when data changed.
-- `systemd/` — service and timer templates (installed copies live in ~/.config/systemd/user/) (daily 06:00 Europe/Berlin, `Persistent=true`, 30 min runtime cap).
+- `systemd/` — service and timer templates (installed copies live in ~/.config/systemd/user/) (daily 05:00 Europe/Berlin, `Persistent=true`, 30 min runtime cap).
 - `.github/workflows/pages.yml` — deploys only `site/`; permissions `contents: read`, `pages: write`, `id-token: write`.
 - `docs/evidence/` — manual review evidence. `var/` (locks, logs, scratch) is git-ignored.
 
@@ -29,7 +29,7 @@ original annotation, and check date. No photos, ad text, titles, or contact deta
 ## Activation status (done 2026-10-17, owner-approved)
 1. Public GitHub repository: https://github.com/calenwalshe/hms-housing-watch (the private research brief is git-ignored and was never committed).
 2. GitHub Pages via Actions — live at https://calenwalshe.github.io/hms-housing-watch/
-3. systemd user units installed in `~/.config/systemd/user/` (checkout path set) and the timer enabled: daily 06:00 Europe/Berlin.
+3. systemd user units installed in `~/.config/systemd/user/` (checkout path set) and the timer enabled: daily 05:00 Europe/Berlin.
 4. Post-activation checks passed: one manual service run (2026-10-17) collected via Mac-lane, committed, and pushed; the public URL serves the current snapshot; a failed refresh (missing dependency, same day) left the snapshot unpublished and unchanged.
 
 ## Known limitations
