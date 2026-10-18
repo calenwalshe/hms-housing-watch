@@ -47,6 +47,9 @@ class Source:
     max_listings: int = 40
     delay_seconds: float = 2
     link_kind: str = "live search"
+    searches: tuple = ()
+    detail_limit: int = 12
+    min_rent: int = 0
 
 
 class SourceError(Exception):
@@ -220,7 +223,101 @@ def collect_rotatingroom(source, cfg, override):
     return leads, stats
 
 
-PARSERS = {"rotatingroom": collect_rotatingroom}
+# ---- Craigslist browser-bridge parser (owner-approved 2026-10-17) ---------
+# Read-only Mac-lane CDP pass over public room searches. Original short
+# annotations from extracted facts only; no ad text, titles, photos, or
+# contact details. Judgment filters mirror the Oct 16 one-time brief.
+
+_CL_HOOD_RANK = {"brookline": 0, "mission hill": 0, "longwood": 0, "roxbury": 1,
+                 "jamaica plain": 1, "fenway": 1, "allston": 2, "brighton": 2,
+                 "somerville": 2, "cambridge": 2, "medford": 3, "boston": 3}
+
+
+def _cl_town(url, fallback):
+    m = re.search(r"/view/d/([a-z]+(?:-[a-z]+)?)-", url)
+    if m and m.group(1) not in ("furnished", "private", "large", "room", "cozy"):
+        return m.group(1).replace("-", " ").title()
+    return fallback
+
+
+def _cl_rank(loc):
+    loc = (loc or "").lower()
+    return next((r for k, r in _CL_HOOD_RANK.items() if k in loc), 9)
+
+
+def _cl_cards(html):
+    out = []
+    for m in re.finditer(
+            r'data-pid="(\d+)".*?href="(https://www\.craigslist\.org/view/d/[^"]+)"'
+            r'.*?result-posted-date">([^<]*)</span>.*?result-location">([^<]*)</span>.*?priceinfo">\$?([0-9,]+)',
+            html, re.S):
+        pid, url, _posted, loc, price = m.groups()
+        out.append({"pid": pid, "url": url, "loc": loc.strip(), "price": int(price.replace(",", ""))})
+    return out
+
+
+def _cl_facts(html):
+    import html as htmllib
+    body = re.search(r'id="postingbody"(.*?)</section>', html, re.S)
+    raw = re.sub(r"<[^>]+>", " ", body.group(1) if body else html)
+    low = re.sub(r"\s+", " ", htmllib.unescape(raw)).lower()
+    facts = []
+    if "furnished" in low:
+        facts.append("furnished")
+    if re.search(r"utilities included|all utilities|incl\.? utilities", low):
+        facts.append("utilities included per ad")
+    if re.search(r"available (now|immediately)", low):
+        facts.append("available now per ad")
+    if re.search(r"short.?term|month.to.month|flexible lease|sublet", low):
+        facts.append("short-term/flexible mentioned")
+    if re.search(r"private bath|own bathroom|ensuite|en-suite", low):
+        facts.append("private bath")
+    if "laundry" in low:
+        facts.append("laundry mentioned")
+    long_lease = bool(re.search(r"1 year lease|12 month|one year lease|year lease required", low))
+    return facts, long_lease
+
+
+def collect_craigslist_browser(source, cfg, override):
+    proxy = cfg["cdp_proxy"]
+    max_rent = cfg["budget"]["max_monthly"]
+    seen, pool, scanned, filtered = {}, [], 0, 0
+    for q in source.searches:
+        url = f"https://boston.craigslist.org/search/roo?query={q.replace(' ', '%20')}&max_price={max_rent}&sort=date"
+        cards = _cl_cards(fetch(url, source, proxy, override))
+        if not cards:  # SPA render race: one slow retry before failing the source
+            time.sleep(10)
+            cards = _cl_cards(fetch(url, source, proxy, override))
+        if not cards:
+            raise SourceError(f"Craigslist search '{q}': no result cards (markup changed?)")
+        scanned += len(cards)
+        for c in cards:
+            if c["pid"] in seen:
+                continue
+            seen[c["pid"]] = c
+            c["town"] = _cl_town(c["url"], c["loc"])
+            if source.min_rent <= c["price"] <= max_rent and _cl_rank(c["town"]) < 9:
+                pool.append(c)
+            else:
+                filtered += 1
+        time.sleep(source.delay_seconds)
+    pool.sort(key=lambda c: (_cl_rank(c["town"]), c["price"]))
+    leads, today = [], date.today()
+    for c in pool[: source.detail_limit]:
+        time.sleep(source.delay_seconds)
+        facts, long_lease = _cl_facts(fetch(c["url"], source, proxy, override))
+        parts = [c["town"], f"${c['price']:,}/month shown"] + facts
+        if long_lease:
+            parts.append("long lease mentioned — only if a Nov 9–Apr 19 sublet is authorized")
+        parts.append("dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host")
+        leads.append(Lead(url=c["url"], source=source.name, annotation="; ".join(parts) + ".",
+                          checked_at=today.isoformat()))
+    stats = {"source": source.name, "checked": scanned, "over_budget": filtered,
+             "date_mismatch": 0, "eligible": len(leads)}
+    return leads, stats
+
+
+PARSERS = {"rotatingroom": collect_rotatingroom, "craigslist_browser": collect_craigslist_browser}
 
 
 # ---- orchestration --------------------------------------------------------

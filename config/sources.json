@@ -20,6 +20,18 @@
       "access_note": "robots.txt (checked 2026-10-16) allows all agents; terms of use contain no automation clause. Reads only the public schema.org data of each listing page (rent, date ranges, neighborhood, stated distance to HMS). Never contacts hosts, signs in, or submits forms. One index request plus at most max_listings detail requests, 2 s apart, once per day."
     },
     {
+      "name": "Craigslist Boston rooms (browser pass)",
+      "search_url": "https://boston.craigslist.org/search/roo",
+      "mode": "collect",
+      "parser": "craigslist_browser",
+      "transport": "cdp",
+      "searches": ["brookline", "mission hill", "longwood", "somerville"],
+      "detail_limit": 12,
+      "min_rent": 600,
+      "delay_seconds": 3,
+      "access_note": "Owner-approved 2026-10-17 promotion of the Mac-lane browser-bridge prototype to production. Read-only real-browser pass over public room searches (4 search pages + up to 12 detail pages, 3 s apart, once daily; no sign-in, forms, favorites, or messages). Publishes only the listing URL, source name, an original short annotation from extracted facts (town, shown price, furnishing and similar flags), and check date. No ad text, titles, photos, or contact details. Craigslist terms restrict automated collection; the owner accepted this risk explicitly on 2026-10-17."
+    },
+    {
       "name": "HMS Housing and Dining",
       "search_url": "https://hms.harvard.edu/life-hms/housing-dining",
       "mode": "link_only",

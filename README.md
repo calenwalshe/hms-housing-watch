@@ -20,10 +20,13 @@ CDP transport; Mac-lane (`mac-lane.sh up`, proxy `http://127.0.0.1:19999`); `git
 `origin` (run_daily.sh). `HMS_CONFIG` overrides the config path.
 Manual run: `.venv/bin/python scripts/daily_refresh.py [--dry-run] [--transport http]`.
 
-Source policy: RotatingRoom Boston is the only `collect` source (robots.txt allows all agents,
-terms have no automation clause; it reads each public listing page's structured data, one index
+Source policy: two `collect` sources. (1) RotatingRoom Boston (robots.txt allows all agents,
+terms have no automation clause; reads each public listing page's structured data, one index
 request plus up to 40 detail requests 2 s apart, once a day; no sign-in, forms, or messages).
-Craigslist, Zillow, and Apartments.com are `link_only`. Stored per lead: URL, source name, a short
+(2) Craigslist Boston rooms via the Mac-lane browser bridge (owner-approved 2026-10-17;
+read-only real-browser pass, 4 search pages + up to 12 detail pages 3 s apart, original
+annotations from extracted facts only; Craigslist terms restrict automated collection —
+see the access_note in config/sources.json). Zillow and Apartments.com remain `link_only`. Stored per lead: URL, source name, a short
 original annotation, and check date. No photos, ad text, titles, or contact details.
 
 ## Activation status (done 2026-10-17, owner-approved)
@@ -39,9 +42,9 @@ original annotation, and check date. No photos, ad text, titles, or contact deta
 - A lead is dropped only when a fully successful run no longer includes it; a failed run keeps everything.
 - The wrapper and workflow have not been executed (gated); only `bash -n`, `py_compile`, and `systemd-analyze calendar` were run.
 
-## Browser-bridge prototype (private, daily 05:00 Berlin)
-`scripts/browser_pass.py` + `scripts/run_prototype.sh` + `hms-housing-prototype` systemd units:
-a read-only Mac-lane browser pass over Craigslist Boston room searches that writes a brief-style
-lead table to the tailnet-only Pixel page `hms-housing-prototype`. It is a prototype companion to
-the public tracker above; nothing from it is published to the public site (Craigslist terms keep
-it link-only there). Manual run: `systemctl --user start hms-housing-prototype.service`.
+## Browser-bridge prototype (superseded 2026-10-17)
+The prototype pass was promoted into the production refresh as the `craigslist_browser`
+collect source (same Mac-lane bridge, same judgment filters), so the daily 05:00 Berlin
+public run now includes its leads with day-by-day first_seen tracking. The standalone
+`hms-housing-prototype` timer is disabled; `scripts/browser_pass.py` remains for manual
+brief-style passes to the tailnet Pixel page.
