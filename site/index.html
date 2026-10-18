@@ -46,7 +46,7 @@
     });
     var su = $("searches");
     if (!d.search_links.length) su.appendChild(el("li", "note", "No search links."));
-    d.search_links.forEach(function (s) { var li = el("li"); li.appendChild(link(s.url, s.source + " — live search")); su.appendChild(li); });
+    d.search_links.forEach(function (s) { var li = el("li"); li.appendChild(link(s.url, s.source + (s.link_kind ? " — " + s.link_kind : ""))); su.appendChild(li); });
   }).catch(fail);
 })();
 </script>

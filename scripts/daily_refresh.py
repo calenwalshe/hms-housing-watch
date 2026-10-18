@@ -33,6 +33,7 @@ class Lead:
 class SearchLink:
     url: str
     source: str
+    link_kind: str = "live search"
 
 
 @dataclass
@@ -44,6 +45,7 @@ class Source:
     transport: str = "http"
     max_listings: int = 40
     delay_seconds: float = 2
+    link_kind: str = "live search"
 
 
 class SourceError(Exception):
@@ -220,7 +222,7 @@ def collect_sources(override=None):
     leads, links, seen = [], [], set()
     for s in sources:
         if s.mode == "link_only":
-            links.append(SearchLink(url=s.search_url, source=s.name))
+            links.append(SearchLink(url=s.search_url, source=s.name, link_kind=s.link_kind))
             continue
         if s.parser not in PARSERS:
             raise SourceError(f"{s.name}: unknown parser '{s.parser}'")

@@ -23,6 +23,7 @@
       "name": "HMS Housing and Dining",
       "search_url": "https://hms.harvard.edu/life-hms/housing-dining",
       "mode": "link_only",
+      "link_kind": "info page",
       "access_note": "Official HMS housing page. Returns HTTP 403 to non-browser clients, so it is a link only; title verified by a read-only browser page load on 2026-10-16."
     },
     {
@@ -35,6 +36,7 @@
       "name": "Harvard University Housing",
       "search_url": "https://huhousing.harvard.edu/",
       "mode": "link_only",
+      "link_kind": "info page",
       "access_note": "Harvard University Housing (HUH) home page. Link only; HTTP 200 and title verified on 2026-10-16."
     },
     {

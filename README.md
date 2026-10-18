@@ -31,7 +31,7 @@ original annotation, and check date. No photos, ad text, titles, or contact deta
 4. Post-activation checks from the plan: one manual service run, open the public URL off-tailnet, confirm a simulated source failure publishes nothing.
 
 ## Known limitations
-- Harvard off-campus portal and HMS housing resources are not configured: their public URLs could not be verified from the collection host (HMS pages 403 non-browser clients; portal host did not resolve). They appear neither as leads nor search links.
+- Harvard/HMS resources are link-only search links (HMS Housing and Dining, Harvard Off-Campus Housing Search, Harvard University Housing), verified by browser title on 2026-10-16; HMS pages return 403 to non-browser clients, so they are never collected.
 - The initial snapshot has one lead; most RotatingRoom Boston listings were excluded on rent above $1,400 or date mismatch. There is no distance filter beyond the stated miles in the annotation (the lead is 5.4 mi from HMS).
 - Annotations rely on the source's structured data; room vs whole-unit and utilities are unknown and marked for confirmation.
 - A lead is dropped only when a fully successful run no longer includes it; a failed run keeps everything.
