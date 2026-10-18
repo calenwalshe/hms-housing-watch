@@ -273,6 +273,16 @@ def write_successful_snapshot(cfg, leads, search_links, generated_at, path=SNAPS
                     prior_first_seen[l["url"]] = l["first_seen"]
         except Exception:
             pass
+    hist_path = os.path.join(os.path.dirname(path), "history.json")
+    if os.path.exists(hist_path):
+        try:
+            for d in json.load(open(hist_path)).get("days", []):
+                for l in d.get("leads", []):
+                    seen = l.get("first_seen") or d.get("date", "")
+                    if seen and (l["url"] not in prior_first_seen or seen < prior_first_seen[l["url"]]):
+                        prior_first_seen[l["url"]] = seen
+        except Exception:
+            pass
     for l in leads:
         l.first_seen = prior_first_seen.get(l.url, day)
     lead_docs = [asdict(l) for l in leads]
@@ -281,7 +291,6 @@ def write_successful_snapshot(cfg, leads, search_links, generated_at, path=SNAPS
            "search_links": [asdict(s) for s in search_links]}
     _atomic_json(doc, path)
     # Day-by-day archive next to the snapshot; same Berlin day replaces, cap 90 days.
-    hist_path = os.path.join(os.path.dirname(path), "history.json")
     days = []
     if os.path.exists(hist_path):
         try:
