@@ -1,5 +1,6 @@
 {
-  "generated_at": "2026-10-17T20:33:07-07:00",
+  "generated_at": "2026-10-17T21:04:26-07:00",
+  "day": "2026-10-18",
   "stay": {
     "start": "2026-11-09",
     "end": "2027-04-19"
@@ -8,12 +9,22 @@
     "target_monthly": 1200,
     "max_monthly": 1400
   },
+  "checked": [
+    {
+      "source": "RotatingRoom (Boston)",
+      "checked": 20,
+      "over_budget": 16,
+      "date_mismatch": 3,
+      "eligible": 1
+    }
+  ],
   "leads": [
     {
       "url": "https://rotatingroom.com/need-a-room/45705",
       "source": "RotatingRoom (Boston)",
       "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
-      "checked_at": "2026-10-17"
+      "checked_at": "2026-10-17",
+      "first_seen": "2026-10-18"
     }
   ],
   "search_links": [
