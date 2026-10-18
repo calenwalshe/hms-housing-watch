@@ -38,3 +38,10 @@ original annotation, and check date. No photos, ad text, titles, or contact deta
 - Annotations rely on the source's structured data; room vs whole-unit and utilities are unknown and marked for confirmation.
 - A lead is dropped only when a fully successful run no longer includes it; a failed run keeps everything.
 - The wrapper and workflow have not been executed (gated); only `bash -n`, `py_compile`, and `systemd-analyze calendar` were run.
+
+## Browser-bridge prototype (private, daily 05:00 Berlin)
+`scripts/browser_pass.py` + `scripts/run_prototype.sh` + `hms-housing-prototype` systemd units:
+a read-only Mac-lane browser pass over Craigslist Boston room searches that writes a brief-style
+lead table to the tailnet-only Pixel page `hms-housing-prototype`. It is a prototype companion to
+the public tracker above; nothing from it is published to the public site (Craigslist terms keep
+it link-only there). Manual run: `systemctl --user start hms-housing-prototype.service`.
