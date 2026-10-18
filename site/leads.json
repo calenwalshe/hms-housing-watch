@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-10-16T19:13:28-07:00",
+  "stay": {
+    "start": "2026-11-09",
+    "end": "2027-04-19"
+  },
+  "budget": {
+    "target_monthly": 1200,
+    "max_monthly": 1400
+  },
+  "leads": [
+    {
+      "url": "https://rotatingroom.com/need-a-room/45705",
+      "source": "RotatingRoom (Boston)",
+      "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
+      "checked_at": "2026-10-16"
+    }
+  ],
+  "search_links": [
+    {
+      "url": "https://hms.harvard.edu/life-hms/housing-dining",
+      "source": "HMS Housing and Dining"
+    },
+    {
+      "url": "https://harvardhousingoffcampus.com/",
+      "source": "Harvard Off-Campus Housing Search (incl. HUH Sublet filter)"
+    },
+    {
+      "url": "https://huhousing.harvard.edu/",
+      "source": "Harvard University Housing"
+    },
+    {
+      "url": "https://boston.craigslist.org/search/roo?query=longwood&min_price=500&max_price=1400",
+      "source": "Craigslist Boston rooms"
+    },
+    {
+      "url": "https://boston.craigslist.org/search/sub?max_price=1400",
+      "source": "Craigslist Boston sublets"
+    },
+    {
+      "url": "https://www.zillow.com/homes/rooms-for-rent/",
+      "source": "Zillow rooms for rent"
+    },
+    {
+      "url": "https://www.apartments.com/rooms/boston-ma/",
+      "source": "Apartments.com rooms (Boston)"
+    }
+  ]
+}

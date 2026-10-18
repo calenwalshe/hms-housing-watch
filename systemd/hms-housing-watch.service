@@ -1,0 +1,12 @@
+# TEMPLATE - inactive. Install only after owner approval (see README.md).
+# Copy to ~/.config/systemd/user/ and replace %h/projects/hms-housing-watch with the checkout path.
+[Unit]
+Description=HMS short-term housing watch daily refresh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/projects/hms-housing-watch
+ExecStart=%h/projects/hms-housing-watch/scripts/run_daily.sh
+TimeoutStartSec=30min

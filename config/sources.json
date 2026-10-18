@@ -1,0 +1,66 @@
+{
+  "stay": {
+    "start": "2026-11-09",
+    "end": "2027-04-19"
+  },
+  "budget": {
+    "target_monthly": 1200,
+    "max_monthly": 1400
+  },
+  "cdp_proxy": "http://127.0.0.1:19999",
+  "sources": [
+    {
+      "name": "RotatingRoom (Boston)",
+      "search_url": "https://rotatingroom.com/sublets/boston-ma",
+      "mode": "collect",
+      "parser": "rotatingroom",
+      "transport": "cdp",
+      "max_listings": 40,
+      "delay_seconds": 2,
+      "access_note": "robots.txt (checked 2026-10-16) allows all agents; terms of use contain no automation clause. Reads only the public schema.org data of each listing page (rent, date ranges, neighborhood, stated distance to HMS). Never contacts hosts, signs in, or submits forms. One index request plus at most max_listings detail requests, 2 s apart, once per day."
+    },
+    {
+      "name": "HMS Housing and Dining",
+      "search_url": "https://hms.harvard.edu/life-hms/housing-dining",
+      "mode": "link_only",
+      "access_note": "Official HMS housing page. Returns HTTP 403 to non-browser clients, so it is a link only; title verified by a read-only browser page load on 2026-10-16."
+    },
+    {
+      "name": "Harvard Off-Campus Housing Search (incl. HUH Sublet filter)",
+      "search_url": "https://harvardhousingoffcampus.com/",
+      "mode": "link_only",
+      "access_note": "Harvard's off-campus portal (operated by Off Campus Partners; Harvard-affiliate login may be needed for some content). Link only; 403 to non-browser clients; title verified by a read-only browser page load on 2026-10-16."
+    },
+    {
+      "name": "Harvard University Housing",
+      "search_url": "https://huhousing.harvard.edu/",
+      "mode": "link_only",
+      "access_note": "Harvard University Housing (HUH) home page. Link only; HTTP 200 and title verified on 2026-10-16."
+    },
+    {
+      "name": "Craigslist Boston rooms",
+      "search_url": "https://boston.craigslist.org/search/roo?query=longwood&min_price=500&max_price=1400",
+      "mode": "link_only",
+      "access_note": "Craigslist terms prohibit automated collection; live search link only."
+    },
+    {
+      "name": "Craigslist Boston sublets",
+      "search_url": "https://boston.craigslist.org/search/sub?max_price=1400",
+      "mode": "link_only",
+      "access_note": "Craigslist terms prohibit automated collection; live search link only."
+    },
+    {
+      "name": "Zillow rooms for rent",
+      "search_url": "https://www.zillow.com/homes/rooms-for-rent/",
+      "mode": "link_only",
+      "access_note": "Bot-blocked (HTTP 403) and terms restrict automation; live search link only."
+    },
+    {
+      "name": "Apartments.com rooms (Boston)",
+      "search_url": "https://www.apartments.com/rooms/boston-ma/",
+      "mode": "link_only",
+      "access_note": "Bot-blocked (HTTP 403); live search link only."
+    }
+  ],
+  "unresolved_sources": []
+}
