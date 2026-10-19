@@ -116,7 +116,8 @@ def fetch(url, source, proxy, override=None):
 
 def _ldjson(html):
     out = []
-    for m in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
+    pattern = r'<script\b(?=[^>]*\btype\s*=\s*["\']application/ld\+json["\'])[^>]*>(.*?)</script\s*>'
+    for m in re.findall(pattern, html, re.I | re.S):
         try:
             out.append(json.loads(m))
         except ValueError:
@@ -197,8 +198,17 @@ def normalize_lead(raw, source, stay, max_rent, today):
 def collect_rotatingroom(source, cfg, override):
     stay = (cfg["stay"]["start"], cfg["stay"]["end"])
     proxy = cfg["cdp_proxy"]
-    index = fetch(source.search_url, source, proxy, override)
-    urls = listing_urls(index)[: source.max_listings]
+    for attempt in range(2):
+        index = fetch(source.search_url, source, proxy, override)
+        try:
+            urls = listing_urls(index)[: source.max_listings]
+            break
+        except SourceError:
+            if attempt == 1:
+                raise
+            # The public page can finish navigation before its structured
+            # result data is present. Retry once; keep failures fail-closed.
+            time.sleep(3)
     if not urls:
         raise SourceError("RotatingRoom index returned no listings")
     leads, today = [], date.today()

@@ -27,7 +27,8 @@ Manual run: `.venv/bin/python scripts/daily_refresh.py [--dry-run] [--transport 
 
 Source policy: two `collect` sources. (1) RotatingRoom Boston (robots.txt allows all agents,
 terms have no automation clause; reads each public listing page's structured data, one index
-request plus up to 40 detail requests 2 s apart, once a day; no sign-in, forms, or messages).
+request plus one retry only if the structured index is missing, and up to 40 detail requests
+2 s apart, once a day; no sign-in, forms, or messages).
 (2) Craigslist Boston rooms via the Mac-lane browser bridge (owner-approved 2026-10-17;
 read-only real-browser pass, 4 search pages + up to 12 detail pages 3 s apart, original
 annotations from extracted facts only; Craigslist terms restrict automated collection —
