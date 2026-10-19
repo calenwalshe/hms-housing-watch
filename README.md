@@ -6,6 +6,7 @@ Static one-column page of current room/sublet leads near Harvard Medical School 
 
 ## Layout
 - `site/` — `index.html`, `styles.css`, `leads.json`, `history.json` (day-by-day archive, Berlin dates; the only published content).
+- `site/review.json` — dated leads from the owner-requested one-time browser search, displayed above current daily leads. The daily collector leaves this review list in place; it does not recheck these entries.
 - `config/sources.json` — stay, budget, CDP proxy, and sources (`collect` or `link_only`).
 - `scripts/daily_refresh.py` — collects, filters, annotates, atomically replaces `site/leads.json` only if every `collect` source succeeds.
 - `scripts/run_daily.sh` — Mac-lane start, single-run lock, refresh, commit/push when data changed.

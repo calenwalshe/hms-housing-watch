@@ -1,0 +1,82 @@
+{
+  "checked_at": "2026-10-19",
+  "stay": {
+    "start": "2026-11-09",
+    "end": "2027-04-19"
+  },
+  "budget": {
+    "target_monthly": 1200,
+    "max_monthly": 1400
+  },
+  "leads": [
+    {
+      "title": "Fenway / Longwood furnished room — $999/month",
+      "source": "Furnished Finder",
+      "url": "https://www.furnishedfinder.com/property/1048949_1",
+      "review_status": "Full stay dates to confirm",
+      "annotation": "Utilities included; shared bathroom; one-month minimum. Listed fees: $149 furnished-room fee and $149 cleaning fee, plus a $999 refundable deposit. Confirm Nov 9–Apr 19 availability, all charges, and the room offered."
+    },
+    {
+      "title": "Jamaica Plain furnished room and deck — $1,100/month",
+      "source": "Furnished Finder",
+      "url": "https://www.furnishedfinder.com/property/547273_1",
+      "review_status": "Full stay dates to confirm",
+      "annotation": "Utilities included; shared bathroom; available Oct 31, 2026; one-month minimum. Resident cat. Confirm availability through Apr 19 and any deposit or other charges."
+    },
+    {
+      "title": "BMC-area furnished room — $1,000/month",
+      "source": "Furnished Finder",
+      "url": "https://www.furnishedfinder.com/property/1034298_1",
+      "review_status": "Full stay dates and HMS commute to confirm",
+      "annotation": "Utilities included; shared bathroom; available Nov 2, 2026; three-month minimum; $150 cleaning fee. Listing describes proximity to Boston Medical Center. Confirm the HMS commute and availability for the full stay."
+    },
+    {
+      "title": "Roslindale room with private living room — $1,298/month quoted",
+      "source": "Airbnb",
+      "url": "https://www.airbnb.com/rooms/45658966?check_in=2026-11-09&check_out=2027-04-19&adults=1",
+      "review_status": "Exact-date quote observed; final price and availability to reconfirm",
+      "annotation": "The browser quote showed Nov 9, 2026–Apr 19, 2027 for one guest at $1,298 monthly and said prices include all fees. Private entrance and living room; shared bathroom and kitchen; paid laundry. Listing describes bus access to Forest Hills. Recheck the final total, payment schedule, and cancellation terms before booking."
+    },
+    {
+      "title": "East Watertown furnished room — $950/month plus utilities",
+      "source": "SpareRoom",
+      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103243591",
+      "review_status": "Full stay dates, utilities, and commute to confirm",
+      "annotation": "Available now; two-month minimum; no maximum term stated; short rentals considered. Shared apartment; utilities excluded. Listing shows no deposit or fees. Confirm the entire stay, utility costs, and HMS commute."
+    },
+    {
+      "title": "Somerville furnished rooms — $1,100–$1,275/month plus utilities",
+      "source": "Harvard Off-Campus Housing Search",
+      "url": "https://www.harvardhousingoffcampus.com/housing/property/deluxe-furnished-private-bedrooms-close-to-tufts-harvard-bu-and-mit/ocp97hcq46",
+      "review_status": "Custom stay and total monthly price to confirm",
+      "annotation": "454 Medford Street; available now. Advertises a four-month lease and shorter terms at higher rates, while other lease fields list longer terms. Utilities and internet are divided between residents; refundable deposit listed at $500–$1,000. Confirm a Nov 9–Apr 19 agreement, room-specific rent, all costs, and HMS commute."
+    },
+    {
+      "title": "East Somerville furnished November–April sublet — $1,350/month plus utilities",
+      "source": "Craigslist Boston sublets",
+      "url": "https://www.craigslist.org/view/d/somerville-furnished-private-room-in/vuch3mEyyqMuSEYaEeKowH",
+      "review_status": "Exact dates and total cost to confirm",
+      "annotation": "Advertises November through April, available Nov 1. Private furnished bedroom in a shared apartment; shared bathroom; in-unit laundry and parking included. Shared utilities could take the total above $1,400. Confirm Apr 19 coverage, all charges, and sublet authorization."
+    },
+    {
+      "title": "Beacon Street furnished room with private bathroom — $800/month advertised",
+      "source": "Roomies",
+      "url": "https://www.roomies.com/rooms/1083874",
+      "review_status": "Extra review: stay terms and listing details unconfirmed",
+      "annotation": "Advertises utilities included, availability now, and a $400 security deposit. No minimum term or end date was stated. Confirm the room, listing legitimacy, full Nov 9–Apr 19 availability, and total charges directly before making commitments."
+    },
+    {
+      "title": "South Whitney Street room — conflicting advertised prices",
+      "source": "SpareRoom and Craigslist (one combined lead)",
+      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103237978",
+      "review_status": "Extra review: conflicting prices; full stay unconfirmed",
+      "annotation": "The same address and substantially matching description appear on both sites. SpareRoom shows $1,290/month in its summary but $1,590 for two people in the description; Craigslist advertises $1,390. Furnished, shared bathroom; short rentals considered and some utilities included per SpareRoom. Counted once. Confirm which room, single-occupancy rent, all charges, and exact dates; it may exceed budget.",
+      "related_links": [
+        {
+          "label": "Compare the Craigslist cross-post",
+          "url": "https://www.craigslist.org/view/d/roxbury-crossing-sublet-room-share-apt/cGQaHV4j1CZwyCde9rpcfM"
+        }
+      ]
+    }
+  ]
+}

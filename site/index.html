@@ -12,6 +12,11 @@
   <div class="meta" id="meta" aria-live="polite">Loading…</div>
   <div class="status" id="status" role="status" hidden></div>
   <p class="note">These are leads, not verified or endorsed listings. Confirm current availability, exact dates, total costs, sublet authorization, and safety directly with the host.</p>
+  <section id="review" hidden>
+    <h2>One-time search: leads for review</h2>
+    <p class="checked" id="review-meta"></p>
+    <ul class="list" id="review-leads"></ul>
+  </section>
   <h2>Current leads</h2>
   <ul class="list" id="leads"></ul>
   <h2>Day by day</h2>
@@ -41,6 +46,29 @@
     }).join(" · ") + (dedupe ? (c.length ? " · " : "") + "Deduplication: " +
       dedupe.duplicates_removed + " duplicate listings removed" : "");
   }
+  fetch("review.json", { cache: "no-cache" }).then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (d) {
+    if (!Array.isArray(d.leads) || !d.leads.length) return;
+    $("review-meta").textContent = "Checked " + d.checked_at + " · " + d.leads.length +
+      " leads for " + d.stay.start + " to " + d.stay.end +
+      ". These reflect the one-time browser search; confirm current availability and the full stay with the host.";
+    d.leads.forEach(function (l) {
+      var li = el("li");
+      li.appendChild(link(l.url, l.title));
+      li.appendChild(el("div", "checked", l.source + " · " + l.review_status));
+      li.appendChild(el("div", "annotation", l.annotation));
+      (l.related_links || []).forEach(function (s) {
+        li.appendChild(link(s.url, s.label));
+      });
+      $("review-leads").appendChild(li);
+    });
+    $("review").hidden = false;
+  }).catch(function () {
+    $("review-meta").textContent = "The one-time review list could not be loaded. Try refreshing this page.";
+    $("review").hidden = false;
+  });
   function renderDays(hist) {
     var box = $("days");
     if (!hist || !hist.days || !hist.days.length) { box.appendChild(el("p", "note", "Daily history starts with the next refresh.")); return; }
