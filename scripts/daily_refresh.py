@@ -14,6 +14,7 @@ import argparse, asyncio, json, os, re, sys, time, urllib.request
 from dataclasses import dataclass, asdict
 from datetime import date, datetime
 from typing import Literal
+from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG = os.environ.get("HMS_CONFIG") or os.path.join(ROOT, "config", "sources.json")
@@ -332,9 +333,52 @@ PARSERS = {"rotatingroom": collect_rotatingroom, "craigslist_browser": collect_c
 
 # ---- orchestration --------------------------------------------------------
 
+def canonical_listing_key(url):
+    """Build a stable identity for a listing URL without its tracking data."""
+    parsed = urlsplit(url.strip())
+    if parsed.scheme.lower() not in ("http", "https") or not parsed.hostname:
+        raise SourceError(f"invalid listing URL: {url!r}")
+
+    host = parsed.hostname.lower().rstrip(".")
+    # Craigslist may return the same post on a regional or www hostname.
+    if host.endswith(".craigslist.org"):
+        host = "craigslist.org"
+    elif host.startswith("www."):
+        host = host[4:]
+
+    port = parsed.port
+    if port and not ((parsed.scheme.lower() == "http" and port == 80) or
+                     (parsed.scheme.lower() == "https" and port == 443)):
+        host = f"{host}:{port}"
+
+    # URL paths are case-sensitive. Decode only percent-encoded unreserved
+    # characters, normalize the hex case of other escapes, and ignore query,
+    # fragment, and trailing slash differences.
+    unreserved = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+    path = re.sub(
+        r"%([0-9a-fA-F]{2})",
+        lambda m: (chr(int(m.group(1), 16)) if chr(int(m.group(1), 16)) in unreserved
+                   else "%" + m.group(1).upper()),
+        parsed.path,
+    )
+    path = path.rstrip("/") or "/"
+    return host + path
+
+
+def dedupe_leads(leads):
+    """Second-pass dedupe across every collector using canonical listing URLs."""
+    unique, seen = [], set()
+    for lead in leads:
+        key = canonical_listing_key(lead.url)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(lead)
+    return unique, len(leads) - len(unique)
+
 def collect_sources(override=None):
     cfg, sources = load_config()
-    leads, links, seen, checked = [], [], set(), []
+    leads, links, checked = [], [], []
     for s in sources:
         if s.mode == "link_only":
             links.append(SearchLink(url=s.search_url, source=s.name, link_kind=s.link_kind))
@@ -348,11 +392,15 @@ def collect_sources(override=None):
         except Exception as e:
             raise SourceError(f"{s.name}: {e}")
         checked.append(stats)
-        for l in got:
-            key = l.url.split("?")[0].rstrip("/")
-            if key not in seen:
-                seen.add(key)
-                leads.append(l)
+        leads.extend(got)
+    collected_count = len(leads)
+    leads, duplicates_removed = dedupe_leads(leads)
+    checked.append({
+        "source": "Deduplication",
+        "checked": collected_count,
+        "duplicates_removed": duplicates_removed,
+        "eligible": len(leads),
+    })
     return cfg, leads, links, checked
 
 
@@ -423,6 +471,10 @@ def main():
         return 1
     generated_at = datetime.now().astimezone().replace(microsecond=0).isoformat()
     print(f"{len(leads)} eligible leads, {len(links)} search links at {generated_at}")
+    dedupe_stats = next((s for s in checked if s["source"] == "Deduplication"), None)
+    if dedupe_stats:
+        print(f"deduplication: removed {dedupe_stats['duplicates_removed']} duplicate listing(s) "
+              f"from {dedupe_stats['checked']} collected")
     if not a.dry_run:
         write_successful_snapshot(cfg, leads, links, generated_at, a.output, checked)
     return 0

@@ -33,10 +33,13 @@
   }
   function checkedLine(c) {
     if (!c || !c.length) return null;
+    var dedupe = c.find(function (s) { return s.source === "Deduplication"; });
+    if (dedupe) c = c.filter(function (s) { return s.source !== "Deduplication"; });
     return c.map(function (s) {
       return s.source + ": " + s.checked + " listings checked, " + s.over_budget + " over budget, " +
         s.date_mismatch + " not covering the full stay, " + s.eligible + " eligible";
-    }).join(" · ");
+    }).join(" · ") + (dedupe ? (c.length ? " · " : "") + "Deduplication: " +
+      dedupe.duplicates_removed + " duplicate listings removed" : "");
   }
   function renderDays(hist) {
     var box = $("days");

@@ -13,6 +13,11 @@ Static one-column page of current room/sublet leads near Harvard Medical School 
 - `.github/workflows/pages.yml` — deploys only `site/`; permissions `contents: read`, `pages: write`, `id-token: write`.
 - `docs/evidence/` — manual review evidence. `var/` (locks, logs, scratch) is git-ignored.
 
+After all collection sources finish, a second pass canonicalizes listing URLs and removes duplicates across
+sources, including tracking-query, fragment, trailing-slash, `www`, and Craigslist regional-host variants.
+It records the number removed in refresh history and on the page. It does not merge distinct URLs based on
+approximate rent or location matches, which could collapse separate rooms.
+
 ## Configuration and dependencies
 Python 3 (stdlib only for `--transport http`); `websockets` (see `requirements.txt`, installed in the
 project `.venv`: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`) for the default
