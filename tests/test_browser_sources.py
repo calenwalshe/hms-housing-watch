@@ -49,6 +49,12 @@ class ListingEligibility(unittest.TestCase):
         self.assertIsNone(note)
         self.assertEqual(reason, 'quote_unavailable')
 
+    def test_monthly_surcharge_is_not_used_as_base_rent(self):
+        self.assertEqual(browser.monthly_price('furnishedfinder',
+            'Additional person adds $100/month to rent.\n$750\n/month'), 750)
+        self.assertEqual(browser.monthly_price('spareroom',
+            'Mandatory fee of $100/month applies.\n$1,000 monthly\n$1,150 monthly'), 1150)
+
     def test_missing_price_fails_closed_instead_of_empty_success(self):
         with self.assertRaises(browser.BrowserSourceError):
             browser.assess_listing('roomies', 'Please sign in to continue', CFG)

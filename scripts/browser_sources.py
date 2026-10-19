@@ -67,7 +67,7 @@ class Browser:
         self.kind = kind
         self.max_listings = max_listings
 
-    def read(self, url):
+    def read(self, url, require_cards=False):
         # Navigate by CDP after creating about:blank: this preserves every URL
         # query parameter and avoids treating the initial empty document as ready.
         req = urllib.request.Request(self.proxy + '/json/new?about:blank', method='PUT')
@@ -111,6 +111,12 @@ class Browser:
                             break
                         await asyncio.sleep(1)
                 page = await evaluate(script)
+                if require_cards:
+                    for _ in range(5):
+                        if page and page.get('cards'):
+                            break
+                        await asyncio.sleep(2)
+                        page = await evaluate(script)
                 if not page or not page.get('text'):
                     raise BrowserSourceError('Empty rendered page')
                 heading = (page['title'] + '\n' + page['text'][:400]).lower()
@@ -148,7 +154,8 @@ def monthly_price(kind, text):
         'harvard': r'\$([\d,]+)(?:\s*-\s*\$[\d,]+)?\s*/\s*Bedroom',
         'craigslist_sublets': r'\$([\d,]+)',
     }
-    match = re.search(patterns[kind], text, re.I)
+    matches = list(re.finditer(patterns[kind], text, re.I))
+    match = max(matches, key=lambda m: int(m.group(1).replace(',', ''))) if matches else None
     if not match:
         # Range cards use the upper advertised rent to avoid passing an
         # over-budget room just because another room in the card is cheaper.
@@ -260,7 +267,7 @@ def collect(source, cfg):
     if source.transport != 'cdp':
         raise BrowserSourceError('This source requires the real-browser transport')
     browser = Browser(cfg['cdp_proxy'], source.parser, source.max_listings)
-    page = browser.read(search_url(source,cfg))
+    page = browser.read(search_url(source,cfg), require_cards=True)
     cards = page['cards']
     if not cards:
         if re.search(r'\b0 (?:rooms|rentals|results)|no (?:matching )?(?:results|rentals|rooms) found', page['text'], re.I):
