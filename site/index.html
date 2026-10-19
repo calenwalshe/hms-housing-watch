@@ -44,7 +44,8 @@
       if (s.status === "failed") return s.source + ": refresh unavailable; " +
         (s.retained || 0) + " previous leads retained with their original check dates";
       return s.source + ": " + s.checked + " listings checked, " + s.over_budget + " over budget, " +
-        s.date_mismatch + " not covering the full stay, " + s.eligible + " eligible";
+        s.date_mismatch + " not covering the full stay, " + s.eligible + " eligible" +
+        (s.quote_unavailable ? ", " + s.quote_unavailable + " without an exact-stay quote" : "");
     }).join(" · ") + (dedupe ? (c.length ? " · " : "") + "Deduplication: " +
       dedupe.duplicates_removed + " duplicate listings removed" : "");
   }

@@ -104,6 +104,12 @@ class Browser:
                     raise BrowserSourceError('Page did not finish rendering')
                 await asyncio.sleep(2)  # allow client-rendered cards to settle
                 script = PAGE_SCRIPT.replace('__KIND__', json.dumps(self.kind)).replace('__LIMIT__', str(self.max_listings))
+                if self.kind == 'airbnb' and '/rooms/' in url:
+                    # The booking quote hydrates after the rest of the listing.
+                    for _ in range(10):
+                        if await evaluate(r"/\$[\d,]+\s*monthly/.test(document.body.innerText)"):
+                            break
+                        await asyncio.sleep(1)
                 page = await evaluate(script)
                 if not page or not page.get('text'):
                     raise BrowserSourceError('Empty rendered page')
@@ -169,6 +175,8 @@ def assess_listing(kind, text, cfg):
     text = re.split(r'Similar rentals|Nearby apartments for rent|Other Nearby Rentals', text, flags=re.I)[0]
     if kind == 'craigslist_sublets' and not re.search(r'rent period:\s*monthly|/mo(?:nth)?|\bmonthly\b', text, re.I):
         raise UnsupportedRentPeriod('Listing does not state a monthly rent period')
+    if kind == 'airbnb' and re.search(r'Add dates for prices', text, re.I) and not re.search(r'\$[\d,]+\s*monthly', text):
+        return None, 'quote_unavailable'
     rent = monthly_price(kind, text)
     start, end = (date.fromisoformat(cfg['stay'][k]) for k in ('start','end'))
     duration = (end-start).days

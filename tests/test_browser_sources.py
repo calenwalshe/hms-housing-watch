@@ -43,6 +43,12 @@ class ListingEligibility(unittest.TestCase):
         self.assertEqual(browser.assess_listing('airbnb',
             '$1,298 monthly\nCHECK-IN\n11/15/2026\nCHECKOUT\n4/19/2027', CFG)[1], 'date_mismatch')
 
+    def test_airbnb_search_price_without_exact_stay_quote_is_excluded(self):
+        note, reason = browser.assess_listing('airbnb',
+            'Add dates for prices\nCHECK-IN\n11/9/2026\nCHECKOUT\n4/19/2027', CFG)
+        self.assertIsNone(note)
+        self.assertEqual(reason, 'quote_unavailable')
+
     def test_missing_price_fails_closed_instead_of_empty_success(self):
         with self.assertRaises(browser.BrowserSourceError):
             browser.assess_listing('roomies', 'Please sign in to continue', CFG)
