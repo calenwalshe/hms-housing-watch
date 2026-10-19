@@ -1,57 +1,85 @@
 # HMS Short-Term Housing Watch
 
-Static one-column page of current room/sublet leads near Harvard Medical School for a stay of
-2026-11-09 to 2027-04-19 (target $1,200/month, stretch $1,400/month). Spec and plan:
-`docs/superpowers/`. The page lists leads, not verified or endorsed listings.
+Public room/sublet leads near Harvard Medical School for **November 9, 2026–April 19, 2027**.
+Target $1,200/month; stretch ceiling $1,400/month. Listings are leads for host confirmation,
+not verified or endorsed housing. Live page: https://calenwalshe.github.io/hms-housing-watch/
 
-## Layout
-- `site/` — `index.html`, `styles.css`, `leads.json`, `history.json` (day-by-day archive, Berlin dates; the only published content).
-- `site/review.json` — dated leads from the owner-requested one-time browser search, displayed above current daily leads. The daily collector leaves this review list in place; it does not recheck these entries.
-- `config/sources.json` — stay, budget, CDP proxy, and sources (`collect` or `link_only`).
-- `scripts/daily_refresh.py` — collects, filters, annotates, atomically replaces `site/leads.json` only if every `collect` source succeeds.
-- `scripts/run_daily.sh` — Mac-lane start, single-run lock, refresh, commit/push when data changed.
-- `systemd/` — service and timer templates (installed copies live in ~/.config/systemd/user/) (daily 05:00 Europe/Berlin, `Persistent=true`, 30 min runtime cap).
-- `.github/workflows/pages.yml` — deploys only `site/`; permissions `contents: read`, `pages: write`, `id-token: write`.
-- `docs/evidence/` — manual review evidence. `var/` (locks, logs, scratch) is git-ignored.
+## Daily operation
 
-After all collection sources finish, a second pass canonicalizes listing URLs and removes duplicates across
-sources, including tracking-query, fragment, trailing-slash, `www`, and Craigslist regional-host variants.
-It records the number removed in refresh history and on the page. It does not merge distinct URLs based on
-approximate rent or location matches, which could collapse separate rooms.
+The enabled `hms-housing-watch.timer` runs at **05:00 Europe/Berlin every day**. The named
+IANA timezone follows German daylight-saving changes automatically. Persistent catch-up is enabled.
+The service has a 30-minute runtime cap and a single-run lock. Mac-lane wakes the cgl MacBook Air,
+keeps it awake, and reads public pages through its real Chrome browser.
 
-## Configuration and dependencies
-Python 3 (stdlib only for `--transport http`); `websockets` (see `requirements.txt`, installed in the
-project `.venv`: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`) for the default
-CDP transport; Mac-lane (`mac-lane.sh up`, proxy `http://127.0.0.1:19999`); `git` with credentials for
-`origin` (run_daily.sh). `HMS_CONFIG` overrides the config path.
-Manual run: `.venv/bin/python scripts/daily_refresh.py [--dry-run] [--transport http]`.
+Collection sources, including the expansion explicitly requested by the owner on 2026-10-19:
 
-Source policy: two `collect` sources. (1) RotatingRoom Boston (robots.txt allows all agents,
-terms have no automation clause; reads each public listing page's structured data, one index
-request plus one retry only if the structured index is missing, and up to 40 detail requests
-2 s apart, once a day; no sign-in, forms, or messages).
-(2) Craigslist Boston rooms via the Mac-lane browser bridge (owner-approved 2026-10-17;
-read-only real-browser pass, 4 search pages + up to 12 detail pages 3 s apart, original
-annotations from extracted facts only; Craigslist terms restrict automated collection —
-see the access_note in config/sources.json). Zillow and Apartments.com remain `link_only`. Stored per lead: URL, source name, a short
-original annotation, and check date. No photos, ad text, titles, or contact details.
+| Source | Search coverage |
+|---|---|
+| RotatingRoom Boston | Structured public index and up to 40 listing pages |
+| Craigslist Boston rooms | Four neighborhood searches, up to 12 detail pages |
+| Craigslist Boston sublets | First 80 rendered cards, up to 6 detail pages |
+| Furnished Finder Boston | Rendered Boston results, up to 6 detail pages |
+| Roomies Boston | Rendered Boston room results, up to 6 detail pages |
+| SpareRoom Boston | Furnished, short-term Boston search; up to 6 detail pages |
+| Airbnb Boston | Private rooms with the exact configured stay dates; up to 6 detail pages |
+| SabbaticalHomes Boston/Cambridge | Public city directory, up to 6 in-budget detail pages |
+| Zillow Boston rooms | Rendered room results, up to 6 detail pages |
+| Apartments.com Boston | Under-$1,400 search, up to 6 detail pages |
+| Harvard off-campus portal | Public housing results, up to 6 detail pages |
 
-## Activation status (done 2026-10-17, owner-approved)
-1. Public GitHub repository: https://github.com/calenwalshe/hms-housing-watch (the private research brief is git-ignored and was never committed).
-2. GitHub Pages via Actions — live at https://calenwalshe.github.io/hms-housing-watch/
-3. systemd user units installed in `~/.config/systemd/user/` (checkout path set) and the timer enabled: daily 05:00 Europe/Berlin.
-4. Post-activation checks passed: one manual service run (2026-10-17) collected via Mac-lane, committed, and pushed; the public URL serves the current snapshot; a failed refresh (missing dependency, same day) left the snapshot unpublished and unchanged.
+The HMS Housing and Dining and Harvard University Housing information pages remain resource links.
+Collection is bounded and does not promise to cover every result or page. Requests are spaced by the
+configured source delay. Source policies and the owner's recurring browser-access authorization are
+recorded in `config/sources.json`. A browser challenge or inaccessible page is a source failure; no
+challenge bypass, account registration, applications, host messages, or booking actions occur.
 
-## Known limitations
-- Harvard/HMS resources are link-only search links (HMS Housing and Dining, Harvard Off-Campus Housing Search, Harvard University Housing), verified by browser title on 2026-10-16; HMS pages return 403 to non-browser clients, so they are never collected.
-- The initial snapshot has one lead; most RotatingRoom Boston listings were excluded on rent above $1,400 or date mismatch. There is no distance filter beyond the stated miles in the annotation (the lead is 5.4 mi from HMS).
-- Annotations rely on the source's structured data; room vs whole-unit and utilities are unknown and marked for confirmation.
-- A lead is dropped only when a fully successful run no longer includes it; a failed run keeps everything.
-- The wrapper and workflow have not been executed (gated); only `bash -n`, `py_compile`, and `systemd-analyze calendar` were run.
+## Eligibility and publication
 
-## Browser-bridge prototype (superseded 2026-10-17)
-The prototype pass was promoted into the production refresh as the `craigslist_browser`
-collect source (same Mac-lane bridge, same judgment filters), so the daily 05:00 Berlin
-public run now includes its leads with day-by-day first_seen tracking. The standalone
-`hms-housing-prototype` timer is disabled; `scripts/browser_pass.py` remains for manual
-brief-style passes to the tailnet Pixel page.
+The job reads rendered public cards and details, then writes original short factual annotations.
+It does not save photos, raw ad text, contact details, or host profiles. Rent above the ceiling,
+known additional monthly utilities that exceed it, explicit late starts/early ends, incompatible
+minimum/maximum stays, and mandatory year-long leases are excluded. Unclear dates, fees,
+furnishing, or lease conditions are marked for confirmation. Airbnb requires a displayed quote for
+both exact stay dates; a search card alone does not establish availability.
+
+Each source is attempted independently. A successful source replaces its previous results, including
+when it legitimately returns no eligible listings. A failed source retains its previous leads and
+**original check dates**, and the page labels that source unavailable. Partial refreshes show a banner.
+If every collection source fails, the existing snapshot and refresh timestamp stay unchanged.
+
+After collection, a second deduplication pass merges URL aliases, preserves semantic listing IDs
+(such as SpareRoom's query IDs), and groups explicitly reviewed cross-posts. Grouped cross-posts keep
+each source link, annotation, and check date so conflicting prices remain visible. Similar rent or
+neighborhood alone never merges separate rooms. Additional confirmed duplicates can be added to
+`duplicate_groups` in the source configuration.
+
+## Files and configuration
+
+- `config/sources.json`: dates, budget, CDP proxy, collection limits, resource links, and reviewed duplicates.
+- `scripts/daily_refresh.py`: orchestration, source failure isolation, deduplication, snapshots, and history.
+- `scripts/browser_sources.py`: bounded Mac-lane DOM checks and factual eligibility rules for added sites.
+- `scripts/run_daily.sh`: lane startup, lock, logging, and data commit/push.
+- `site/leads.json`: daily results and individual source status.
+- `site/history.json`: the latest snapshot per Berlin day, retaining up to 90 days.
+- `site/review.json`: the dated one-time review list; daily collection does not rewrite this historical list.
+- `.github/workflows/pages.yml`: deploys only `site/` to GitHub Pages on pushes to `main`.
+- `systemd/`: service/timer templates; installed service uses `/home/agent/work/work-20261016-180224`.
+- `tests/`: regression checks for budget/date/lease filtering, failed-source retention, and deduplication.
+- `var/`: ignored locks, logs, temporary snapshots, and live-check output.
+
+Requires Python 3 and `websockets` from `requirements.txt` in the deployed checkout's `.venv`,
+Mac-lane (`http://127.0.0.1:19999`), and the service user's existing SSH Git credentials.
+`HMS_CONFIG` overrides the configuration path. Example commands:
+
+```bash
+python3 -m unittest discover -s tests -v
+.venv/bin/python scripts/daily_refresh.py --dry-run
+.venv/bin/python scripts/daily_refresh.py --output var/manual/leads.json
+systemctl --user start hms-housing-watch.service
+systemctl --user list-timers hms-housing-watch.timer
+```
+
+Create the custom output directory before using `--output`. Browser sources require CDP and do not
+support the HTTP transport override. Logs are `var/logs/daily-YYYY-MM-DD.log` in the deployed checkout.
+The private housing-research brief remains ignored and must not be committed. The standalone prototype
+timer is disabled; its older scripts are retained for historical/manual use.

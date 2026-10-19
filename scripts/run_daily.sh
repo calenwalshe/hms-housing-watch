@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Daily wrapper: start Mac-lane, take a single-run lock, refresh, commit/push on change.
 # Activated 2026-10-17 with owner approval (public repo + systemd timer live).
-# Failure at any step exits nonzero and leaves the committed snapshot untouched.
+# Collection preserves prior data for individual failed sources; all-source failure aborts publication.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

@@ -2,8 +2,8 @@
 """Daily HMS housing lead refresh.
 
 Reads config/sources.json, collects leads only from `collect` sources, and
-atomically replaces site/leads.json only if every `collect` source succeeded.
-Any failure exits nonzero and leaves the existing snapshot untouched.
+refreshes successful sources and keeps the last checked data for failed sources.
+If every collection source fails, the snapshot and timestamp remain untouched.
 
 Usage: daily_refresh.py [--transport cdp|http] [--output PATH] [--dry-run]
   --transport  override each source's configured transport (default: per source)
@@ -11,10 +11,11 @@ Usage: daily_refresh.py [--transport cdp|http] [--output PATH] [--dry-run]
   --dry-run    collect and print, write nothing
 """
 import argparse, asyncio, json, os, re, sys, time, urllib.request
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from typing import Literal
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, parse_qsl, urlencode
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG = os.environ.get("HMS_CONFIG") or os.path.join(ROOT, "config", "sources.json")
@@ -29,6 +30,7 @@ class Lead:
     annotation: str
     checked_at: str
     first_seen: str = ""
+    cross_posts: list = field(default_factory=list)
 
 
 @dataclass
@@ -55,6 +57,10 @@ class Source:
 
 class SourceError(Exception):
     pass
+
+
+def berlin_today():
+    return datetime.now(ZoneInfo("Europe/Berlin")).date()
 
 
 def load_config():
@@ -211,7 +217,7 @@ def collect_rotatingroom(source, cfg, override):
             time.sleep(3)
     if not urls:
         raise SourceError("RotatingRoom index returned no listings")
-    leads, today = [], date.today()
+    leads, today = [], berlin_today()
     stats = {"source": source.name, "checked": 0, "over_budget": 0, "date_mismatch": 0, "eligible": 0}
     max_rent = cfg["budget"]["max_monthly"]
     for u in urls:
@@ -323,7 +329,7 @@ def collect_craigslist_browser(source, cfg, override):
                 filtered += 1
         time.sleep(source.delay_seconds)
     pool.sort(key=lambda c: (_cl_rank(c["town"]), c["price"]))
-    leads, today = [], date.today()
+    leads, today = [], berlin_today()
     for c in pool[: source.detail_limit]:
         time.sleep(source.delay_seconds)
         facts, long_lease = _cl_facts(fetch(c["url"], source, proxy, override))
@@ -338,7 +344,18 @@ def collect_craigslist_browser(source, cfg, override):
     return leads, stats
 
 
+def collect_browser_source(source, cfg, override):
+    from browser_sources import collect
+    if override and override != "cdp":
+        raise SourceError("This source requires Mac-lane CDP")
+    documents, stats = collect(source, cfg)
+    return [Lead(**doc) for doc in documents], stats
+
+
 PARSERS = {"rotatingroom": collect_rotatingroom, "craigslist_browser": collect_craigslist_browser}
+PARSERS.update({name: collect_browser_source for name in (
+    "furnishedfinder", "roomies", "spareroom", "airbnb", "sabbaticalhomes",
+    "zillow", "apartments", "harvard", "craigslist_sublets")})
 
 
 # ---- orchestration --------------------------------------------------------
@@ -372,45 +389,82 @@ def canonical_listing_key(url):
         parsed.path,
     )
     path = path.rstrip("/") or "/"
+    if host == "spareroom.com":
+        ids = [(k, v) for k, v in parse_qsl(parsed.query) if k == "flatshare_id"]
+        if ids:
+            return host + "/listing?" + urlencode(ids)
+    if host == "craigslist.org" and "/view/d/" in path:
+        return host + "/listing/" + path.rsplit("/", 1)[-1]
     return host + path
 
 
-def dedupe_leads(leads):
-    """Second-pass dedupe across every collector using canonical listing URLs."""
-    unique, seen = [], set()
+def dedupe_leads(leads, duplicate_groups=None):
+    """Merge URL aliases and explicitly reviewed cross-posts, keeping provenance."""
+    aliases = {}
+    for index, group in enumerate(duplicate_groups or []):
+        for url in group["urls"]:
+            aliases[canonical_listing_key(url)] = f"reviewed-group:{index}"
+    unique, seen = [], {}
     for lead in leads:
-        key = canonical_listing_key(lead.url)
+        canonical = canonical_listing_key(lead.url)
+        key = aliases.get(canonical, canonical)
         if key in seen:
+            primary = seen[key]
+            if canonical != canonical_listing_key(primary.url):
+                primary.cross_posts.append({"url":lead.url, "source":lead.source,
+                    "annotation":lead.annotation, "checked_at":lead.checked_at,
+                    "first_seen":lead.first_seen})
             continue
-        seen.add(key)
+        seen[key] = lead
         unique.append(lead)
     return unique, len(leads) - len(unique)
 
-def collect_sources(override=None):
+
+def collect_sources(override=None, prior_snapshot=None):
     cfg, sources = load_config()
-    leads, links, checked = [], [], []
-    for s in sources:
-        if s.mode == "link_only":
-            links.append(SearchLink(url=s.search_url, source=s.name, link_kind=s.link_kind))
-            continue
-        if s.parser not in PARSERS:
-            raise SourceError(f"{s.name}: unknown parser '{s.parser}'")
+    if prior_snapshot is None:
         try:
-            got, stats = PARSERS[s.parser](s, cfg, override)
-        except SourceError:
-            raise
-        except Exception as e:
-            raise SourceError(f"{s.name}: {e}")
+            with open(SNAPSHOT) as stream:
+                prior_snapshot = json.load(stream)
+        except FileNotFoundError:
+            prior_snapshot = {"leads": []}
+    previous = list(prior_snapshot.get("leads", []))
+    for lead in prior_snapshot.get("leads", []):
+        previous.extend(lead.get("cross_posts", []))
+    leads, links, checked, successes = [], [], [], 0
+    fresh_sources = set()
+    for source in sources:
+        links.append(SearchLink(url=source.search_url, source=source.name, link_kind=source.link_kind))
+        if source.mode == "link_only":
+            continue
+        print(f"checking {source.name}", flush=True)
+        try:
+            if source.parser not in PARSERS:
+                raise SourceError(f"Unknown parser: {source.parser}")
+            got, stats = PARSERS[source.parser](source, cfg, override)
+            stats["status"] = "ok"
+            stats["checked_at"] = berlin_today().isoformat()
+            successes += 1
+            fresh_sources.add(source.name)
+            leads.extend(got)
+            print(f"  {len(got)} retained after eligibility checks", flush=True)
+        except Exception as error:
+            retained = [Lead(**{k:v for k,v in old.items() if k in Lead.__dataclass_fields__})
+                        for old in previous if old.get("source") == source.name]
+            for old in retained:
+                old.cross_posts = []
+            leads.extend(retained)
+            stats = {"source":source.name, "status":"failed", "retained":len(retained)}
+            print(f"  failed; retaining {len(retained)} previously checked leads: {error}", flush=True)
         checked.append(stats)
-        leads.extend(got)
+    if not successes:
+        raise SourceError("Every collection source failed; previous snapshot preserved")
+    # Prefer a freshly checked alias when a cross-post's other source failed.
+    leads.sort(key=lambda lead: (lead.source in fresh_sources, lead.checked_at), reverse=True)
     collected_count = len(leads)
-    leads, duplicates_removed = dedupe_leads(leads)
-    checked.append({
-        "source": "Deduplication",
-        "checked": collected_count,
-        "duplicates_removed": duplicates_removed,
-        "eligible": len(leads),
-    })
+    leads, duplicates_removed = dedupe_leads(leads, cfg.get("duplicate_groups"))
+    checked.append({"source":"Deduplication", "checked":collected_count,
+                    "duplicates_removed":duplicates_removed, "eligible":len(leads)})
     return cfg, leads, links, checked
 
 
@@ -424,44 +478,51 @@ def _atomic_json(doc, path):
     with open(tmp, "w") as f:
         json.dump(doc, f, indent=2)
         f.write("\n")
-    json.loads(open(tmp).read())  # validate before replacing
+    with open(tmp) as stream:
+        json.load(stream)  # validate before replacing
     os.replace(tmp, path)
 
 
 def write_successful_snapshot(cfg, leads, search_links, generated_at, path=SNAPSHOT, checked=None):
     day = _berlin_day(generated_at)
     prior_first_seen = {}
+    aliases = {canonical_listing_key(url): f"reviewed-group:{index}"
+               for index, group in enumerate(cfg.get("duplicate_groups", []))
+               for url in group["urls"]}
+
+    def identity(url):
+        key = canonical_listing_key(url)
+        return aliases.get(key, key)
+
+    def remember(listings, fallback=""):
+        for listing in listings:
+            key = identity(listing["url"])
+            seen = listing.get("first_seen") or fallback
+            if seen and (key not in prior_first_seen or seen < prior_first_seen[key]):
+                prior_first_seen[key] = seen
+            remember(listing.get("cross_posts", []), seen)
+
     if os.path.exists(path):
-        try:
-            for l in json.load(open(path)).get("leads", []):
-                if l.get("first_seen"):
-                    prior_first_seen[l["url"]] = l["first_seen"]
-        except Exception:
-            pass
+        with open(path) as stream:
+            remember(json.load(stream).get("leads", []))
     hist_path = os.path.join(os.path.dirname(path), "history.json")
+    days = []
     if os.path.exists(hist_path):
-        try:
-            for d in json.load(open(hist_path)).get("days", []):
-                for l in d.get("leads", []):
-                    seen = l.get("first_seen") or d.get("date", "")
-                    if seen and (l["url"] not in prior_first_seen or seen < prior_first_seen[l["url"]]):
-                        prior_first_seen[l["url"]] = seen
-        except Exception:
-            pass
-    for l in leads:
-        l.first_seen = prior_first_seen.get(l.url, day)
+        with open(hist_path) as stream:
+            days = json.load(stream).get("days", [])
+        for previous_day in days:
+            remember(previous_day.get("leads", []), previous_day.get("date", ""))
+    for lead in leads:
+        lead.first_seen = prior_first_seen.get(identity(lead.url), lead.first_seen or day)
+        for cross_post in lead.cross_posts:
+            cross_post["first_seen"] = prior_first_seen.get(identity(cross_post["url"]), lead.first_seen)
     lead_docs = [asdict(l) for l in leads]
     doc = {"generated_at": generated_at, "day": day, "stay": cfg["stay"], "budget": cfg["budget"],
+           "snapshot_status": "partial" if any(s.get("status") == "failed" for s in (checked or [])) else "complete",
            "checked": checked or [], "leads": lead_docs,
            "search_links": [asdict(s) for s in search_links]}
     _atomic_json(doc, path)
     # Day-by-day archive next to the snapshot; same Berlin day replaces, cap 90 days.
-    days = []
-    if os.path.exists(hist_path):
-        try:
-            days = json.load(open(hist_path)).get("days", [])
-        except Exception:
-            days = []
     days = [d for d in days if d.get("date") != day]
     days.append({"date": day, "generated_at": generated_at, "checked": checked or [], "leads": lead_docs})
     days.sort(key=lambda d: d["date"])
@@ -475,7 +536,13 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     try:
-        cfg, leads, links, checked = collect_sources(a.transport)
+        prior = None
+        if a.output != SNAPSHOT:
+            prior = {"leads": []}
+            if os.path.exists(a.output):
+                with open(a.output) as stream:
+                    prior = json.load(stream)
+        cfg, leads, links, checked = collect_sources(a.transport, prior_snapshot=prior)
     except Exception as e:
         print(f"refresh failed; snapshot unchanged: {e}", file=sys.stderr)
         return 1
