@@ -3,26 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HMS Short-Term Housing Watch</title>
+<title>Short-term housing near HMS | Housing Watch</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main>
-  <h1>HMS Short-Term Housing Watch</h1>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">Harvard Medical School · Boston</p>
+    <h1>Short-term housing near HMS</h1>
+    <p class="hero-copy">Room and sublet leads for the coming stay.</p>
+  </header>
   <div class="meta" id="meta" aria-live="polite">Loading…</div>
   <div class="status" id="status" role="status" hidden></div>
-  <p class="note">These are leads, not verified or endorsed listings. Confirm current availability, exact dates, total costs, sublet authorization, and safety directly with the host.</p>
+  <p class="note safety-note">These leads are not verified or endorsed. Confirm availability, dates, total cost, sublet permission, and safety with the host.</p>
   <section id="review" hidden>
-    <h2>One-time search: leads for review</h2>
+    <p class="section-kicker">Earlier search</p>
+    <h2>Leads to review</h2>
     <p class="checked" id="review-meta"></p>
     <ul class="list" id="review-leads"></ul>
   </section>
-  <h2>Current leads</h2>
-  <ul class="list" id="leads"></ul>
-  <h2>Day by day</h2>
-  <div id="days"></div>
-  <h2>Search these sites</h2>
-  <ul class="list" id="searches"></ul>
+  <section aria-labelledby="current-title">
+    <p class="section-kicker">Updated daily</p>
+    <h2 id="current-title">Current leads</h2>
+    <ul class="list" id="leads"></ul>
+  </section>
+  <section aria-labelledby="history-title">
+    <p class="section-kicker">Changes over time</p>
+    <h2 id="history-title">Day by day</h2>
+    <div id="days"></div>
+  </section>
+  <section aria-labelledby="searches-title">
+    <p class="section-kicker">Browse more</p>
+    <h2 id="searches-title">Search these sites</h2>
+    <ul class="list search-list" id="searches"></ul>
+  </section>
 </main>
 <script>
 (function () {
@@ -105,7 +119,15 @@
     if (d.snapshot_status === "partial") m.appendChild(el("p", "note",
       "Some sources could not be refreshed. Their previous leads remain below with their original check dates; see each source's status."));
     var cl = checkedLine(d.checked);
-    if (cl) m.appendChild(el("p", "", cl));
+    if (cl) {
+      var sourceCount = (d.checked || []).filter(function (s) { return s.source !== "Deduplication"; }).length;
+      var statusLabel = d.snapshot_status === "partial" ? "Partial refresh" : "All sources checked";
+      m.appendChild(el("p", "source-status", d.leads.length + " matching leads · " + statusLabel.toLowerCase()));
+      var sourceDetails = el("details", "source-details");
+      sourceDetails.appendChild(el("summary", "", "Results from " + sourceCount + " sources"));
+      sourceDetails.appendChild(el("p", "checked", cl));
+      m.appendChild(sourceDetails);
+    }
     var ul = $("leads");
     if (!d.leads.length) ul.appendChild(el("li", "note", "No matching leads returned at the last refresh."));
     d.leads.forEach(function (l) {
