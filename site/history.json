@@ -1807,17 +1807,21 @@
     },
     {
       "date": "2026-10-29",
-      "generated_at": "2026-10-28T21:07:01-07:00",
+      "generated_at": "2026-10-29T00:42:41-07:00",
       "checked": [
         {
           "source": "RotatingRoom (Boston)",
-          "status": "failed",
-          "retained": 1
+          "checked": 20,
+          "over_budget": 16,
+          "date_mismatch": 3,
+          "eligible": 1,
+          "status": "ok",
+          "checked_at": "2026-10-29"
         },
         {
           "source": "Craigslist Boston rooms (browser pass)",
-          "checked": 313,
-          "over_budget": 97,
+          "checked": 308,
+          "over_budget": 96,
           "date_mismatch": 0,
           "eligible": 12,
           "status": "ok",
@@ -1825,11 +1829,11 @@
         },
         {
           "source": "Harvard Off-Campus Housing Search (incl. HUH Sublet filter)",
-          "checked": 39,
-          "over_budget": 4,
-          "date_mismatch": 4,
+          "checked": 38,
+          "over_budget": 3,
+          "date_mismatch": 5,
           "eligible": 1,
-          "details_checked": 5,
+          "details_checked": 6,
           "status": "ok",
           "checked_at": "2026-10-29"
         },
@@ -1837,9 +1841,9 @@
           "source": "Furnished Finder (Boston)",
           "checked": 36,
           "over_budget": 35,
-          "date_mismatch": 1,
-          "eligible": 0,
-          "details_checked": 2,
+          "date_mismatch": 0,
+          "eligible": 1,
+          "details_checked": 1,
           "status": "ok",
           "checked_at": "2026-10-29"
         },
@@ -1907,8 +1911,8 @@
         {
           "source": "Apartments.com rooms (Boston)",
           "checked": 50,
-          "over_budget": 0,
-          "date_mismatch": 6,
+          "over_budget": 1,
+          "date_mismatch": 5,
           "eligible": 0,
           "details_checked": 6,
           "status": "ok",
@@ -1916,12 +1920,20 @@
         },
         {
           "source": "Deduplication",
-          "checked": 38,
+          "checked": 39,
           "duplicates_removed": 1,
-          "eligible": 37
+          "eligible": 38
         }
       ],
       "leads": [
+        {
+          "url": "https://rotatingroom.com/need-a-room/45705",
+          "source": "RotatingRoom (Boston)",
+          "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
+          "checked_at": "2026-10-29",
+          "first_seen": "2026-10-17",
+          "cross_posts": []
+        },
         {
           "url": "https://www.craigslist.org/view/d/brookline-furnished-room-11-brookline/4w1dLPkzXan1kRWNmhxfXN",
           "source": "Craigslist Boston rooms (browser pass)",
@@ -2024,6 +2036,14 @@
           "annotation": "Brighton; $1,400/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
           "checked_at": "2026-10-29",
           "first_seen": "2026-10-19",
+          "cross_posts": []
+        },
+        {
+          "url": "https://www.furnishedfinder.com/property/974945_1",
+          "source": "Furnished Finder (Boston)",
+          "annotation": "Boston; $1,400/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
+          "checked_at": "2026-10-29",
+          "first_seen": "2026-10-29",
           "cross_posts": []
         },
         {
@@ -2216,14 +2236,6 @@
           "annotation": "Brookline; $1,150/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
           "checked_at": "2026-10-29",
           "first_seen": "2026-10-28",
-          "cross_posts": []
-        },
-        {
-          "url": "https://rotatingroom.com/need-a-room/45705",
-          "source": "RotatingRoom (Boston)",
-          "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
-          "checked_at": "2026-10-28",
-          "first_seen": "2026-10-17",
           "cross_posts": []
         }
       ]
