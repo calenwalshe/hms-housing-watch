@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-29T00:42:41-07:00",
-  "day": "2026-10-29",
+  "generated_at": "2026-10-29T21:07:09-07:00",
+  "day": "2026-10-30",
   "stay": {
     "start": "2026-11-09",
     "end": "2027-04-19"
@@ -9,55 +9,51 @@
     "target_monthly": 1200,
     "max_monthly": 1400
   },
-  "snapshot_status": "complete",
+  "snapshot_status": "partial",
   "checked": [
     {
       "source": "RotatingRoom (Boston)",
-      "checked": 20,
-      "over_budget": 16,
-      "date_mismatch": 3,
-      "eligible": 1,
-      "status": "ok",
-      "checked_at": "2026-10-29"
+      "status": "failed",
+      "retained": 1
     },
     {
       "source": "Craigslist Boston rooms (browser pass)",
-      "checked": 308,
-      "over_budget": 96,
+      "checked": 312,
+      "over_budget": 94,
       "date_mismatch": 0,
       "eligible": 12,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Harvard Off-Campus Housing Search (incl. HUH Sublet filter)",
-      "checked": 38,
-      "over_budget": 3,
+      "checked": 39,
+      "over_budget": 4,
       "date_mismatch": 5,
-      "eligible": 1,
-      "details_checked": 6,
+      "eligible": 0,
+      "details_checked": 5,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Furnished Finder (Boston)",
       "checked": 36,
-      "over_budget": 35,
+      "over_budget": 34,
       "date_mismatch": 0,
-      "eligible": 1,
-      "details_checked": 1,
+      "eligible": 2,
+      "details_checked": 2,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "SabbaticalHomes (Boston/Cambridge)",
-      "checked": 361,
-      "over_budget": 326,
+      "checked": 362,
+      "over_budget": 327,
       "date_mismatch": 1,
       "eligible": 5,
       "details_checked": 6,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Roomies Boston rooms",
@@ -67,38 +63,38 @@
       "eligible": 6,
       "details_checked": 6,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "SpareRoom Boston",
       "checked": 10,
-      "over_budget": 2,
+      "over_budget": 3,
       "date_mismatch": 1,
       "eligible": 5,
       "details_checked": 6,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Airbnb Boston monthly stays",
       "checked": 24,
-      "over_budget": 20,
+      "over_budget": 21,
       "date_mismatch": 0,
-      "eligible": 4,
-      "details_checked": 4,
+      "eligible": 3,
+      "details_checked": 3,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Craigslist Boston sublets",
       "checked": 80,
       "over_budget": 0,
-      "date_mismatch": 1,
-      "eligible": 4,
+      "date_mismatch": 0,
+      "eligible": 5,
       "details_checked": 6,
       "rent_period_unknown": 1,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Zillow rooms for rent",
@@ -108,39 +104,31 @@
       "eligible": 0,
       "details_checked": 2,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Apartments.com rooms (Boston)",
-      "checked": 50,
-      "over_budget": 1,
-      "date_mismatch": 5,
+      "checked": 48,
+      "over_budget": 0,
+      "date_mismatch": 6,
       "eligible": 0,
       "details_checked": 6,
       "status": "ok",
-      "checked_at": "2026-10-29"
+      "checked_at": "2026-10-30"
     },
     {
       "source": "Deduplication",
       "checked": 39,
-      "duplicates_removed": 1,
-      "eligible": 38
+      "duplicates_removed": 0,
+      "eligible": 39
     }
   ],
   "leads": [
     {
-      "url": "https://rotatingroom.com/need-a-room/45705",
-      "source": "RotatingRoom (Boston)",
-      "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-17",
-      "cross_posts": []
-    },
-    {
       "url": "https://www.craigslist.org/view/d/brookline-furnished-room-11-brookline/4w1dLPkzXan1kRWNmhxfXN",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $775/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -148,7 +136,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-village-furnished-room-10/rZ33Rj1r5KkrhUqsRWrqtA",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline Village; $800/month shown; furnished; short-term/flexible mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-18",
       "cross_posts": []
     },
@@ -156,7 +144,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-medium-size-for-rent-for-900/fc3u2aDqkrqXKkgg7u94B2",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $900/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-18",
       "cross_posts": []
     },
@@ -164,7 +152,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-bedroom-for-rent/aQBB7okue9CrYCCvAYACzj",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $1,000/month shown; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -172,7 +160,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-village-1050-private-room-in/4FBXKzyJcJYdKMa9HqwNHD",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline Village; $1,050/month shown; available now per ad; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -180,15 +168,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-large-private-room-with-bay/ub2SXDkA8rZntHzCN6jgje",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $1,090/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-18",
-      "cross_posts": []
-    },
-    {
-      "url": "https://www.craigslist.org/view/d/brookline-village-furnished-room-in/taF15krmRbbSoyEWtg6vZw",
-      "source": "Craigslist Boston rooms (browser pass)",
-      "annotation": "Brookline Village; $1,100/month shown; furnished; short-term/flexible mentioned; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-18",
       "cross_posts": []
     },
@@ -196,7 +176,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-large-room-in-3br-shared-apt/3FH1nVQ2iQHyJWJ7JEeWFA",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $1,125/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -204,7 +184,7 @@
       "url": "https://www.craigslist.org/view/d/acton-1265-beautiful-furnished-room/wuGFESDnoTEkTUpbpDsrn6",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "boston/cambridge/brookline; $1,265/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -212,7 +192,7 @@
       "url": "https://www.craigslist.org/view/d/brookline-village-private-room-no/7EdvjpQGjBLr9ke328dwEf",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline Village; $1,300/month shown; furnished; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -220,39 +200,47 @@
       "url": "https://www.craigslist.org/view/d/brookline-furnished-room/qpjAVjfoCfg9LX1eB5YEHi",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "Brookline; $1,300/month shown; furnished; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-29",
       "cross_posts": []
     },
     {
-      "url": "https://www.craigslist.org/view/d/acton-1325-beautiful-furnished-room/oEWevv7PfmRLBmoKr3RSsX",
+      "url": "https://www.craigslist.org/view/d/acton-1325-beautiful-furnished-room/7kXdHR4dV9vUX3njp4z7up",
       "source": "Craigslist Boston rooms (browser pass)",
       "annotation": "boston/cambridge/brookline; $1,325/month shown; furnished; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-29",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
       "cross_posts": []
     },
     {
-      "url": "https://www.harvardhousingoffcampus.com/housing/property/short-term-furnished-fall-spring-room-rental/ocpfrqy9qt",
-      "source": "Harvard Off-Campus Housing Search (incl. HUH Sublet filter)",
-      "annotation": "Brighton; $1,400/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-19",
+      "url": "https://www.craigslist.org/view/d/brookline-nice-room-in-brookline/oZpm35wEyqFnPtc3NWdqvv",
+      "source": "Craigslist Boston rooms (browser pass)",
+      "annotation": "Brookline; $1,375/month shown; laundry mentioned; dates/utilities not verified: confirm exact stay dates, total cost, and sublet authorization with host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
       "cross_posts": []
     },
     {
-      "url": "https://www.furnishedfinder.com/property/974945_1",
+      "url": "https://www.furnishedfinder.com/property/1038698_1",
       "source": "Furnished Finder (Boston)",
-      "annotation": "Boston; $1,400/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-29",
+      "annotation": "Boston; $1,250/month advertised; furnished listing; utilities included per listing; minimum stay 2 months; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
+      "cross_posts": []
+    },
+    {
+      "url": "https://www.furnishedfinder.com/property/552161_1",
+      "source": "Furnished Finder (Boston)",
+      "annotation": "Boston; $1,250/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
       "cross_posts": []
     },
     {
       "url": "https://www.sabbaticalhomes.com/Rental/153273",
       "source": "SabbaticalHomes (Boston/Cambridge)",
       "annotation": "Watertown; $950/month advertised; furnished listing; utilities included per listing; minimum stay 30 days; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -260,7 +248,7 @@
       "url": "https://www.sabbaticalhomes.com/Rental/143638",
       "source": "SabbaticalHomes (Boston/Cambridge)",
       "annotation": "Somerville; $975/month advertised; furnished listing; utilities included per listing; minimum stay 30 days; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -268,7 +256,7 @@
       "url": "https://www.sabbaticalhomes.com/Rental/135974",
       "source": "SabbaticalHomes (Boston/Cambridge)",
       "annotation": "Cambridge; $1,000/month advertised; furnished listing; utilities included per listing; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -276,7 +264,7 @@
       "url": "https://www.sabbaticalhomes.com/Rental/147177",
       "source": "SabbaticalHomes (Boston/Cambridge)",
       "annotation": "Watertown; $1,000/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -284,7 +272,7 @@
       "url": "https://www.sabbaticalhomes.com/Rental/137629",
       "source": "SabbaticalHomes (Boston/Cambridge)",
       "annotation": "Somerville; $1,180/month advertised; furnished listing; confirm utilities and all additional charges; minimum stay 3 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -292,7 +280,7 @@
       "url": "https://www.roomies.com/rooms/1073840",
       "source": "Roomies Boston rooms",
       "annotation": "Mission Hill; $1,000/month advertised; furnished listing; utilities included per listing; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -300,7 +288,7 @@
       "url": "https://www.roomies.com/rooms/1081096",
       "source": "Roomies Boston rooms",
       "annotation": "Longwood; $1,150/month advertised; unfurnished stated; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -308,7 +296,7 @@
       "url": "https://www.roomies.com/rooms/1081095",
       "source": "Roomies Boston rooms",
       "annotation": "Longwood; $1,150/month advertised; unfurnished stated; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -316,7 +304,7 @@
       "url": "https://www.roomies.com/rooms/1080897",
       "source": "Roomies Boston rooms",
       "annotation": "Longwood; $1,150/month advertised; unfurnished stated; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -324,7 +312,7 @@
       "url": "https://www.roomies.com/rooms/1081093",
       "source": "Roomies Boston rooms",
       "annotation": "Boston; $1,150/month advertised; unfurnished stated; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
       "cross_posts": []
     },
@@ -332,47 +320,39 @@
       "url": "https://www.roomies.com/rooms/1081101",
       "source": "Roomies Boston rooms",
       "annotation": "Dorchester; $1,150/month advertised; unfurnished stated; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-29",
       "cross_posts": []
     },
     {
-      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103237978",
+      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103252235",
       "source": "SpareRoom Boston",
-      "annotation": "Longwood; $1,290/month advertised; furnished listing; confirm utilities and all additional charges; conflicting advertised prices; confirm the applicable rent; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-19",
-      "cross_posts": [
-        {
-          "url": "https://www.craigslist.org/view/d/roxbury-crossing-sublet-room-share-apt/cGQaHV4j1CZwyCde9rpcfM",
-          "source": "Craigslist Boston sublets",
-          "annotation": "Longwood; $1,390/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-          "checked_at": "2026-10-29",
-          "first_seen": "2026-10-19"
-        }
-      ]
-    },
-    {
-      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103251276",
-      "source": "SpareRoom Boston",
-      "annotation": "$900/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-29",
+      "annotation": "$800/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
       "cross_posts": []
     },
     {
       "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103241229",
       "source": "SpareRoom Boston",
       "annotation": "Somerville; $990/month advertised; furnished listing; utilities included per listing; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
+      "cross_posts": []
+    },
+    {
+      "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=103213389",
+      "source": "SpareRoom Boston",
+      "annotation": "$1,000/month advertised; furnished listing; utilities included per listing; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
       "cross_posts": []
     },
     {
       "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=102953952",
       "source": "SpareRoom Boston",
       "annotation": "$1,200/month advertised; furnished listing; confirm utilities and all additional charges; minimum stay 2 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -380,7 +360,7 @@
       "url": "https://www.spareroom.com/roommate/room_for_rent.pl?flatshare_id=101008138",
       "source": "SpareRoom Boston",
       "annotation": "Dorchester; $1,200/month advertised; furnished listing; utilities included per listing; minimum stay 1 months; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-29",
       "cross_posts": []
     },
@@ -388,7 +368,7 @@
       "url": "https://www.airbnb.com/rooms/25025114?check_in=2026-11-09&check_out=2027-04-19&adults=1",
       "source": "Airbnb Boston monthly stays",
       "annotation": "Dorchester; $1,372/month advertised; furnished listing; confirm utilities and all additional charges; displayed quote for the exact stay dates; reconfirm final total and cancellation terms.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -396,31 +376,31 @@
       "url": "https://www.airbnb.com/rooms/45658966?check_in=2026-11-09&check_out=2027-04-19&adults=1",
       "source": "Airbnb Boston monthly stays",
       "annotation": "Roslindale; $1,379/month advertised; furnished listing; confirm utilities and all additional charges; displayed quote for the exact stay dates; reconfirm final total and cancellation terms.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-19",
-      "cross_posts": []
-    },
-    {
-      "url": "https://www.airbnb.com/rooms/1189829506115257733?check_in=2026-11-09&check_out=2027-04-19&adults=1",
-      "source": "Airbnb Boston monthly stays",
-      "annotation": "Boston; $1,388/month advertised; furnished listing; confirm utilities and all additional charges; displayed quote for the exact stay dates; reconfirm final total and cancellation terms.",
-      "checked_at": "2026-10-29",
-      "first_seen": "2026-10-28",
       "cross_posts": []
     },
     {
       "url": "https://www.airbnb.com/rooms/19164115?check_in=2026-11-09&check_out=2027-04-19&adults=1",
       "source": "Airbnb Boston monthly stays",
       "annotation": "Boston; $1,394/month advertised; furnished listing; confirm utilities and all additional charges; displayed quote for the exact stay dates; reconfirm final total and cancellation terms.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
+      "cross_posts": []
+    },
+    {
+      "url": "https://www.craigslist.org/view/d/roxbury-crossing-sublet-room-share-apt/cGQaHV4j1CZwyCde9rpcfM",
+      "source": "Craigslist Boston sublets",
+      "annotation": "Longwood; $1,390/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-19",
       "cross_posts": []
     },
     {
       "url": "https://www.craigslist.org/view/d/boston-cozy-studio-perfect-for-medical/6heAnVLpdVuAvuvZ6c1orb",
       "source": "Craigslist Boston sublets",
       "annotation": "Longwood; $1,299/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -428,7 +408,7 @@
       "url": "https://www.craigslist.org/view/d/south-boston-suitable-cozy-onebedroom/jW9WfDEN1L3o6kWNKVV5dS",
       "source": "Craigslist Boston sublets",
       "annotation": "Boston; $1,100/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
       "cross_posts": []
     },
@@ -436,8 +416,24 @@
       "url": "https://www.craigslist.org/view/d/brookline-cozy-furnished-room-near-bu/6kd2DCE25t9r22Ux1qdY31",
       "source": "Craigslist Boston sublets",
       "annotation": "Brookline; $1,150/month advertised; furnished listing; confirm utilities and all additional charges; confirm the exact full stay dates and authorization with the host.",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-10-30",
       "first_seen": "2026-10-28",
+      "cross_posts": []
+    },
+    {
+      "url": "https://www.craigslist.org/view/d/allston-allston-sublet-cozy-studio/9cqNxD5XyocypAu83ssWkS",
+      "source": "Craigslist Boston sublets",
+      "annotation": "Brookline; $1,399/month advertised; furnished listing; utilities included per listing; confirm the exact full stay dates and authorization with the host.",
+      "checked_at": "2026-10-30",
+      "first_seen": "2026-10-30",
+      "cross_posts": []
+    },
+    {
+      "url": "https://rotatingroom.com/need-a-room/45705",
+      "source": "RotatingRoom (Boston)",
+      "annotation": "Somerville; 5.36 mi straight-line from HMS (per site); 2 bd unit; confirm whether room or whole unit; $1,200/month stated; stated availability covers the full stay; listed as furnished sublet; confirm utilities and total cost.",
+      "checked_at": "2026-10-29",
+      "first_seen": "2026-10-17",
       "cross_posts": []
     }
   ],
