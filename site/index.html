@@ -130,7 +130,11 @@
     }
     var ul = $("leads");
     if (!d.leads.length) ul.appendChild(el("li", "note", "No matching leads returned at the last refresh."));
-    d.leads.forEach(function (l) {
+    d.leads.slice().sort(function (a, b) {
+      var aDate = a.first_seen || a.checked_at || "";
+      var bDate = b.first_seen || b.checked_at || "";
+      return bDate.localeCompare(aDate);
+    }).forEach(function (l) {
       var li = el("li");
       var top = el("div"); if (l.first_seen && d.day && l.first_seen === d.day) top.appendChild(el("span", "new", "New today · ")); top.appendChild(el("span", "source", l.source + " — ")); top.appendChild(link(l.url, "Open listing")); li.appendChild(top);
       li.appendChild(el("div", "annotation", l.annotation));
